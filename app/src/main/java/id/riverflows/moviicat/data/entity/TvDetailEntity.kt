@@ -1,5 +1,9 @@
 package id.riverflows.moviicat.data.entity
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class TvDetailEntity(
         val id: Int,
         val originalName: String,
@@ -13,4 +17,4 @@ data class TvDetailEntity(
         val status: String,
         val voteCount: Int,
         val voteAverage: Float,
-)
+): Parcelable

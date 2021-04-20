@@ -1,6 +1,5 @@
-package id.riverflows.moviicat.ui.main.home
+package id.riverflows.moviicat.ui.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -8,10 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import id.riverflows.moviicat.R
-import id.riverflows.moviicat.app.App
 import id.riverflows.moviicat.data.entity.MovieDetailEntity
 import id.riverflows.moviicat.databinding.ItemMovieGridBinding
-import timber.log.Timber
+import id.riverflows.moviicat.util.UtilConstants
 
 
 class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
@@ -51,11 +49,10 @@ class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
     ){
         fun bindView(data: MovieDetailEntity){
             val context = itemView.context
-            val uri = Uri.withAppendedPath(App.DRAWABLE_URI, data.posterPath)
-            Timber.d(uri.toString())
+            val posterResource = context.resources.getIdentifier(data.posterPath, UtilConstants.DEF_TYPE_RAW, context.packageName)
             with(binding){
                 Glide.with(context)
-                        .load(uri)
+                        .load(posterResource)
                         .apply(RequestOptions().placeholder(R.drawable.ic_loading))
                         .error(R.drawable.ic_broken_image)
                         .into(ivPoster)

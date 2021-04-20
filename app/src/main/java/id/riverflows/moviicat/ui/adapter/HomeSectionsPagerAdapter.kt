@@ -1,9 +1,10 @@
-package id.riverflows.moviicat.ui.main.home
+package id.riverflows.moviicat.ui.adapter
 
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import id.riverflows.moviicat.ui.home.movie.MovieFragment
+import id.riverflows.moviicat.ui.home.tv.TvFragment
 
 class HomeSectionsPagerAdapter(activity: FragmentActivity): FragmentStateAdapter(activity) {
     override fun getItemCount(): Int = 2

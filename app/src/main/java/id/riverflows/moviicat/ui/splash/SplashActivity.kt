@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import id.riverflows.moviicat.databinding.ActivitySplashBinding
-import id.riverflows.moviicat.ui.main.HomeActivity
+import id.riverflows.moviicat.ui.home.HomeActivity
 import id.riverflows.moviicat.util.UtilConstants.SPLASH_DURATION
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

@@ -1,4 +1,4 @@
-package id.riverflows.moviicat.ui.main.home
+package id.riverflows.moviicat.ui.home.tv
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,9 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import id.riverflows.moviicat.data.entity.TvDetailEntity
 import id.riverflows.moviicat.databinding.FragmentTvBinding
+import id.riverflows.moviicat.ui.adapter.TvListAdapter
 import id.riverflows.moviicat.ui.decoration.SpaceItemDecoration
 import id.riverflows.moviicat.ui.detail.tv.DetailTvActivity
-import id.riverflows.moviicat.ui.main.TvViewModel
 import id.riverflows.moviicat.util.UtilConstants
 
 class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
@@ -22,18 +22,22 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
     private lateinit var viewModel: TvViewModel
     private val rvAdapter = TvListAdapter()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         _binding = FragmentTvBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rvAdapter.setItemClickCallback(this)
+        bindInterface()
         obtainViewModel()
         observeViewModel()
         initiateRecyclerView()
         viewModel.getTvList()
+    }
+
+    private fun bindInterface(){
+        rvAdapter.setItemClickCallback(this)
     }
 
     private fun obtainViewModel(){
@@ -61,7 +65,7 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
     }
 
     override fun onItemClicked(data: TvDetailEntity) {
-        startActivity(Intent(context, DetailTvActivity::class.java))
+        startActivity(Intent(context, DetailTvActivity::class.java).putExtra(UtilConstants.EXTRA_TV, data))
     }
 
     override fun onDestroy() {

@@ -1,4 +1,4 @@
-package id.riverflows.moviicat.ui.main.home
+package id.riverflows.moviicat.ui.home.movie
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,9 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import id.riverflows.moviicat.data.entity.MovieDetailEntity
 import id.riverflows.moviicat.databinding.FragmentMovieBinding
+import id.riverflows.moviicat.ui.adapter.MovieListAdapter
 import id.riverflows.moviicat.ui.decoration.SpaceItemDecoration
 import id.riverflows.moviicat.ui.detail.movie.DetailMovieActivity
-import id.riverflows.moviicat.ui.main.MovieViewModel
 import id.riverflows.moviicat.util.UtilConstants
 
 class MovieFragment : Fragment(), MovieListAdapter.OnItemClickCallback {
@@ -22,18 +22,22 @@ class MovieFragment : Fragment(), MovieListAdapter.OnItemClickCallback {
     private lateinit var viewModel: MovieViewModel
     private val rvAdapter = MovieListAdapter()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         _binding = FragmentMovieBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rvAdapter.setItemClickCallback(this)
+        bindInterface()
         obtainViewModel()
         observeViewModel()
         populateRecyclerView()
         viewModel.getMovieList()
+    }
+
+    private fun bindInterface(){
+        rvAdapter.setItemClickCallback(this)
     }
 
     private fun obtainViewModel(){
@@ -59,12 +63,12 @@ class MovieFragment : Fragment(), MovieListAdapter.OnItemClickCallback {
         rvAdapter.setList(list)
     }
 
+    override fun onItemClicked(data: MovieDetailEntity) {
+        startActivity(Intent(context, DetailMovieActivity::class.java).putExtra(UtilConstants.EXTRA_MOVIE, data))
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-    }
-
-    override fun onItemClicked(data: MovieDetailEntity) {
-        startActivity(Intent(context, DetailMovieActivity::class.java))
     }
 }

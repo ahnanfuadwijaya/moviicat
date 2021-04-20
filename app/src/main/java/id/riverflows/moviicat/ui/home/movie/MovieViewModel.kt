@@ -1,4 +1,4 @@
-package id.riverflows.moviicat.ui.main
+package id.riverflows.moviicat.ui.home.movie
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
