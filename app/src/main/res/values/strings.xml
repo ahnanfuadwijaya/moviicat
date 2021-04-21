@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">MoviiCat</string>
     <string name="error_no_data">No Data</string>
+    <string name="title_share">Share</string>
+    <string name="text_separator">|</string>
+    <string name="title_overview">Overview</string>
+    <string name="title_detail_movie">Detail Movie</string>
+    <string name="field_popularity">Popularity: %.2f</string>
+    <string name="field_airing_date">%1s - %2s</string>
+    <string name="desc_poster">poster</string>
+    <string name="title_detail_tv_show">Detail TV Show</string>
 </resources>

@@ -6,7 +6,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class TvDetailEntity(
         val id: Int,
-        val originalName: String,
         val name: String,
         val genres: List<GenreEntity>,
         val firstAirDate: String,
@@ -15,6 +14,5 @@ data class TvDetailEntity(
         val overview: String,
         val popularity: Float,
         val status: String,
-        val voteCount: Int,
         val voteAverage: Float,
 ): Parcelable

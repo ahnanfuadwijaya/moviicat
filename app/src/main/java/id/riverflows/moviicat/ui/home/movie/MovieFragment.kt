@@ -64,7 +64,7 @@ class MovieFragment : Fragment(), MovieListAdapter.OnItemClickCallback {
     }
 
     override fun onItemClicked(data: MovieDetailEntity) {
-        startActivity(Intent(context, DetailMovieActivity::class.java).putExtra(UtilConstants.EXTRA_MOVIE, data))
+        startActivity(Intent(context, DetailMovieActivity::class.java).putExtra(UtilConstants.EXTRA_MOVIE_ID, data.id))
     }
 
     override fun onDestroy() {

@@ -65,7 +65,7 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
     }
 
     override fun onItemClicked(data: TvDetailEntity) {
-        startActivity(Intent(context, DetailTvActivity::class.java).putExtra(UtilConstants.EXTRA_TV, data))
+        startActivity(Intent(context, DetailTvActivity::class.java).putExtra(UtilConstants.EXTRA_TV_ID, data.id))
     }
 
     override fun onDestroy() {

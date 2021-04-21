@@ -22,11 +22,7 @@
                 android:layout_gravity="bottom"
                 app:layout_collapseMode="pin" />
             <androidx.appcompat.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:title="@string/app_name"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:layout_collapseMode="none" >
+                style="@style/ToolbarStyle" >
                 <TextView
                     android:id="@+id/tv_title"
                     style="@style/TextAppearance.AppCompat.Title"
