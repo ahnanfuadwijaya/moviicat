@@ -8,6 +8,7 @@ import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import id.riverflows.moviicat.utils.getValueForTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -19,6 +20,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 
 @ExperimentalCoroutinesApi
 class TvViewModelTest {
@@ -39,16 +42,17 @@ class TvViewModelTest {
     @Test
     fun getTvList() {
         val list = DataDummy.getTvList()
-        val observer = Mockito.mock(Observer::class.java) as Observer<List<TvDetailEntity>>
+        val observer = mock(Observer::class.java) as Observer<List<TvDetailEntity>>
         viewModel.tvList.observeForever(observer)
         runBlocking {
             viewModel.getTvList()
+            verify(observer).onChanged(list)
+            delay(500)
+            assertNotNull(viewModel.tvList.value)
+            assertEquals(viewModel.tvList.value, list)
+            assertEquals(viewModel.tvList.value?.size, list.size)
+            viewModel.tvList.removeObserver(observer)
         }
-        Mockito.verify(observer).onChanged(list)
-        assertNotNull(viewModel.tvList.getValueForTest())
-        assertEquals(viewModel.tvList.getValueForTest(), list)
-        assertEquals(viewModel.tvList.getValueForTest()?.size, list.size)
-        viewModel.tvList.removeObserver(observer)
     }
 
     @After

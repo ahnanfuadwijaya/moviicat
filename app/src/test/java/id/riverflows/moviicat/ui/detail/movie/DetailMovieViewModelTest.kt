@@ -9,6 +9,7 @@ import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import id.riverflows.moviicat.utils.getValueForTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -19,7 +20,11 @@ import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
+import org.junit.runner.RunWith
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
+import org.robolectric.RobolectricTestRunner
 
 @ExperimentalCoroutinesApi
 class DetailMovieViewModelTest {
@@ -41,15 +46,16 @@ class DetailMovieViewModelTest {
     @Test
     fun getMovie() {
         val movie = DataDummy.getMovie(movieId)
-        val observer = Mockito.mock(Observer::class.java) as Observer<MovieDetailEntity>
+        val observer = mock(Observer::class.java) as Observer<MovieDetailEntity>
         viewModel.movie.observeForever(observer)
         runBlocking {
             viewModel.getMovie(movieId)
+            delay(500)
+            verify(observer).onChanged(movie)
+            assertNotNull(viewModel.movie.value)
+            assertEquals(viewModel.movie.value, movie)
+            viewModel.movie.removeObserver(observer)
         }
-        Mockito.verify(observer).onChanged(movie)
-        assertNotNull(viewModel.movie.getValueForTest())
-        assertEquals(viewModel.movie.value, movie)
-        viewModel.movie.removeObserver(observer)
     }
 
     @After

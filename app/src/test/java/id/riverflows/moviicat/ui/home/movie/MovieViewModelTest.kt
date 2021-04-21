@@ -8,6 +8,7 @@ import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import id.riverflows.moviicat.utils.getValueForTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -45,12 +46,13 @@ class MovieViewModelTest {
         viewModel.movieList.observeForever(observer)
         runBlocking {
             viewModel.getMovieList()
+            delay(500)
+            verify(observer).onChanged(list)
+            assertNotNull(viewModel.movieList.value)
+            assertEquals(viewModel.movieList.value, list)
+            assertEquals(viewModel.movieList.value?.size, list.size)
+            viewModel.movieList.removeObserver(observer)
         }
-        verify(observer).onChanged(list)
-        assertNotNull(viewModel.movieList.getValueForTest())
-        assertEquals(viewModel.movieList.getValueForTest(), list)
-        assertEquals(viewModel.movieList.getValueForTest()?.size, list.size)
-        viewModel.movieList.removeObserver(observer)
     }
 
     @After
