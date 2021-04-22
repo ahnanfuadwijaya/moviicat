@@ -8,11 +8,5 @@ import id.riverflows.moviicat.ui.home.tv.TvFragment
 
 class HomeSectionsPagerAdapter(activity: FragmentActivity): FragmentStateAdapter(activity) {
     override fun getItemCount(): Int = 2
-
-    override fun createFragment(position: Int): Fragment {
-        return when(position){
-            0 -> MovieFragment()
-            else -> TvFragment()
-        }
-    }
+    override fun createFragment(position: Int): Fragment = if(position==0) MovieFragment()  else TvFragment()
 }

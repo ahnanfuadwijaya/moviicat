@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="IconLauncherShape">
+        <ignore path="src/main/res/mipmap-hdpi/ic_launcher.png" />
+        <ignore path="src/main/res/mipmap-mdpi/ic_launcher.png" />
+        <ignore path="src/main/res/mipmap-xhdpi/ic_launcher.png" />
+        <ignore path="src/main/res/mipmap-xxhdpi/ic_launcher.png" />
+        <ignore path="src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
+    </issue>
+    <issue id="UnusedResources">
+        <ignore path="src/main/res/raw/chaos_walking.jpg" />
+        <ignore path="src/main/res/raw/cherry.jpg" />
+        <ignore path="src/main/res/raw/godzilla_vs_kong.jpg" />
+        <ignore path="src/main/res/raw/greys_anatomy.jpg" />
+        <ignore path="src/main/res/raw/invincible.jpg" />
+        <ignore path="src/main/res/raw/lucifer.jpg" />
+        <ignore path="src/main/res/raw/monster_hunter.jpg" />
+        <ignore path="src/main/res/raw/mortal_kombat.jpg" />
+        <ignore path="src/main/res/raw/mortal_kombat_legends_scorpions_revenge.jpg" />
+        <ignore path="src/main/res/raw/raya_and_the_last_dragon.jpg" />
+        <ignore path="src/main/res/raw/riverdale.jpg" />
+        <ignore path="src/main/res/raw/space_sweepers.jpg" />
+        <ignore path="src/main/res/raw/superman_and_lois.jpg" />
+        <ignore path="src/main/res/raw/the_falcon_and_the_winter_soldier.jpg" />
+        <ignore path="src/main/res/raw/the_flash.jpg" />
+        <ignore path="src/main/res/raw/the_good_doctor.jpg" />
+        <ignore path="src/main/res/raw/the_walking_dead.jpg" />
+        <ignore path="src/main/res/raw/tom_and_jerry.jpg" />
+        <ignore path="src/main/res/raw/twist.jpg" />
+        <ignore path="src/main/res/raw/wanda_vision.jpg" />
+        <ignore path="src/main/res/raw/who_kill_sara.jpg" />
+        <ignore path="src/main/res/raw/zack_snyders_justice_league.jpg" />
+    </issue>
+</lint>

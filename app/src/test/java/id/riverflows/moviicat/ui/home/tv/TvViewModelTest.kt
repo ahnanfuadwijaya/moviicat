@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer
 import id.riverflows.moviicat.data.entity.TvDetailEntity
 import id.riverflows.moviicat.util.DataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
-import id.riverflows.moviicat.utils.getValueForTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -19,13 +18,12 @@ import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 
 @ExperimentalCoroutinesApi
 class TvViewModelTest {
-    lateinit var viewModel: TvViewModel
+    private lateinit var viewModel: TvViewModel
     @get:Rule
     val coroutineScope =  MainCoroutineScopeRule()
     @get:Rule
@@ -46,8 +44,8 @@ class TvViewModelTest {
         viewModel.tvList.observeForever(observer)
         runBlocking {
             viewModel.getTvList()
-            verify(observer).onChanged(list)
             delay(500)
+            verify(observer).onChanged(list)
             assertNotNull(viewModel.tvList.value)
             assertEquals(viewModel.tvList.value, list)
             assertEquals(viewModel.tvList.value?.size, list.size)

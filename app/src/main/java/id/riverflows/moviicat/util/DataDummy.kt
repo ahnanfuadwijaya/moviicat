@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package id.riverflows.moviicat.util
 
 import id.riverflows.moviicat.data.entity.GenreEntity
@@ -11,6 +13,7 @@ object DataDummy {
         movieList.addAll(generateMovieData())
         tvList.addAll(generateTvData())
     }
+
     private fun generateMovieData(): List<MovieDetailEntity>{
         val list = mutableListOf<MovieDetailEntity>()
         list.add(

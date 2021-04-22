@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer
 import id.riverflows.moviicat.data.entity.MovieDetailEntity
 import id.riverflows.moviicat.util.DataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
-import id.riverflows.moviicat.utils.getValueForTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -25,7 +24,7 @@ import org.mockito.Mockito.verify
 
 @ExperimentalCoroutinesApi
 class MovieViewModelTest {
-    lateinit var viewModel: MovieViewModel
+    private lateinit var viewModel: MovieViewModel
     @get:Rule
     val coroutineScope =  MainCoroutineScopeRule()
     @get:Rule

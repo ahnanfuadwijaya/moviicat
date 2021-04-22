@@ -1,8 +1,8 @@
 package id.riverflows.moviicat.ui.splash
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import id.riverflows.moviicat.databinding.ActivitySplashBinding
 import id.riverflows.moviicat.ui.home.HomeActivity

@@ -2,9 +2,7 @@ package id.riverflows.moviicat.ui.detail.tv
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import id.riverflows.moviicat.data.entity.MovieDetailEntity
 import id.riverflows.moviicat.data.entity.TvDetailEntity
-import id.riverflows.moviicat.ui.detail.movie.DetailMovieViewModel
 import id.riverflows.moviicat.util.DataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import kotlinx.coroutines.Dispatchers
@@ -15,18 +13,18 @@ import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 
 @ExperimentalCoroutinesApi
 class DetailTvViewModelTest{
     private val tvId = 88396
-    lateinit var viewModel: DetailTvViewModel
+    private lateinit var viewModel: DetailTvViewModel
     @get:Rule
     val coroutineScope =  MainCoroutineScopeRule()
     @get:Rule
@@ -39,9 +37,9 @@ class DetailTvViewModelTest{
         Dispatchers.setMain(testDispatcher)
     }
 
-    @Suppress("UNCHECKED_CAST")
     @Test
-    fun getMovie() {
+    @Suppress("UNCHECKED_CAST")
+    fun getDetailTv() {
         val tv = DataDummy.getTv(tvId)
         val observer = mock(Observer::class.java) as Observer<TvDetailEntity>
         viewModel.tv.observeForever(observer)

@@ -23,7 +23,6 @@ class HomeActivityTest{
     fun loadHome(){
         onView(withId(android.R.id.content)).check(matches(isDisplayed()))
         onView(withId(R.id.tabs)).check(matches(isDisplayed()))
-        onView(withId(android.R.id.content)).check(matches(isDisplayed()))
         onView(withId(android.R.id.content)).perform(swipeUp())
         onView(withId(android.R.id.content)).perform(swipeLeft())
         onView(withId(android.R.id.content)).perform(swipeDown())

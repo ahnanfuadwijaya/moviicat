@@ -1,6 +1,5 @@
 package id.riverflows.moviicat.ui.detail.tv
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +13,7 @@ import id.riverflows.moviicat.data.entity.GenreEntity
 import id.riverflows.moviicat.data.entity.TvDetailEntity
 import id.riverflows.moviicat.databinding.ActivityDetailTvBinding
 import id.riverflows.moviicat.util.UtilConstants
+import id.riverflows.moviicat.util.UtilShare
 
 class DetailTvActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailTvBinding
@@ -75,20 +75,12 @@ class DetailTvActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.menu_share){
-            shareTv()
-        }
+        if(item.itemId == R.id.menu_share) shareTv()
         return super.onOptionsItemSelected(item)
     }
 
     private fun shareTv(){
         if(!this::tv.isInitialized) return
-        val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, tv.name)
-            type = "text/plain"
-        }
-        val shareIntent = Intent.createChooser(sendIntent, getString(R.string.title_share))
-        startActivity(shareIntent)
+        UtilShare.share(this, tv.name)
     }
 }

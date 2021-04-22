@@ -1,10 +1,9 @@
 package id.riverflows.moviicat.ui.detail.movie
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -14,6 +13,7 @@ import id.riverflows.moviicat.data.entity.GenreEntity
 import id.riverflows.moviicat.data.entity.MovieDetailEntity
 import id.riverflows.moviicat.databinding.ActivityDetailMovieBinding
 import id.riverflows.moviicat.util.UtilConstants
+import id.riverflows.moviicat.util.UtilShare
 
 class DetailMovieActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailMovieBinding
@@ -75,20 +75,12 @@ class DetailMovieActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.menu_share){
-            shareMovie()
-        }
+        if(item.itemId == R.id.menu_share) shareMovie()
         return super.onOptionsItemSelected(item)
     }
 
     private fun shareMovie(){
         if(!this::movie.isInitialized) return
-        val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, movie.title)
-            type = "text/plain"
-        }
-        val shareIntent = Intent.createChooser(sendIntent, getString(R.string.title_share))
-        startActivity(shareIntent)
+        UtilShare.share(this, movie.title)
     }
 }

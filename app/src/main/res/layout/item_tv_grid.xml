@@ -17,7 +17,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@tools:sample/avatars"
+            android:contentDescription="@string/desc_poster" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -46,7 +47,8 @@
             <ImageView
                 android:id="@+id/iv_score"
                 style="@style/RVItemIvScore"
-                android:src="@drawable/ic_score" />
+                android:src="@drawable/ic_score"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tv_score"

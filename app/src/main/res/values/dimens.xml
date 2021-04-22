@@ -8,11 +8,9 @@
     <dimen name="item_progress_size">32dp</dimen>
     <dimen name="item_poster_height">150dp</dimen>
     <dimen name="item_poster_width">100dp</dimen>
-    <dimen name="icon_size">24dp</dimen>
     <dimen name="text_size_item_title">18sp</dimen>
     <dimen name="text_size_detail_title">24sp</dimen>
     <dimen name="text_size_item_field">12sp</dimen>
     <dimen name="text_size_detail_field">14sp</dimen>
-    <dimen name="progress_indeterminate_horizontal_height">8dp</dimen>
     <dimen name="appbar_height">128dp</dimen>
 </resources>
