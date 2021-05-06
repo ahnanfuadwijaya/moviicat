@@ -1,18 +1,29 @@
 package id.riverflows.moviicat.data.entity
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TvDetailEntity(
-        val id: Int,
+        @field:SerializedName("id")
+        val id: Long,
+        @field:SerializedName("name")
         val name: String,
+        @field:SerializedName("genres")
         val genres: List<GenreEntity>,
+        @field:SerializedName("first_air_date")
         val firstAirDate: String,
+        @field:SerializedName("last_air_date")
         val lastAirDate: String,
+        @field:SerializedName("poster_path")
         val posterPath: String?,
+        @field:SerializedName("overview")
         val overview: String,
+        @field:SerializedName("popularity")
         val popularity: Float,
+        @field:SerializedName("status")
         val status: String,
+        @field:SerializedName("vote_average")
         val voteAverage: Float,
 ): Parcelable

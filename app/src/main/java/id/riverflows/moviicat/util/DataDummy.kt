@@ -285,13 +285,13 @@ object DataDummy {
 
     fun getMovieList(): List<MovieDetailEntity> = movieList
     fun getTvList(): List<TvDetailEntity> = tvList
-    fun getMovie(movieId: Int): MovieDetailEntity?{
+    fun getMovie(movieId: Long): MovieDetailEntity?{
         for(item in movieList){
             if(item.id == movieId) return item
         }
         return null
     }
-    fun getTv(tvId: Int): TvDetailEntity?{
+    fun getTv(tvId: Long): TvDetailEntity?{
         for(item in tvList){
             if(item.id == tvId) return item
         }

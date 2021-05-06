@@ -8,15 +8,17 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import id.riverflows.moviicat.R
 import id.riverflows.moviicat.data.entity.MovieDetailEntity
+import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.databinding.ItemMovieGridBinding
+import id.riverflows.moviicat.di.Injection
 import id.riverflows.moviicat.util.UtilConstants
 
 
 class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
-    private val list = mutableListOf<MovieDetailEntity>()
+    private val list = mutableListOf<MovieEntity>()
     private lateinit var onItemClickCallback: OnItemClickCallback
 
-    fun setList(listParam: List<MovieDetailEntity>){
+    fun setList(listParam: List<MovieEntity>){
         if(list.isNotEmpty()) list.clear()
         list.addAll(listParam)
         notifyDataSetChanged()
@@ -47,12 +49,12 @@ class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
     inner class MovieHolder(private val binding: ItemMovieGridBinding): RecyclerView.ViewHolder(
             binding.root
     ){
-        fun bindView(data: MovieDetailEntity){
+        fun bindView(data: MovieEntity){
             val context = itemView.context
-            val posterResource = context.resources.getIdentifier(data.posterPath, UtilConstants.DEF_TYPE_RAW, context.packageName)
+            val posterPath = "${Injection.providePosterPath()}${data.posterPath}"
             with(binding){
                 Glide.with(context)
-                        .load(posterResource)
+                        .load(posterPath)
                         .apply(RequestOptions().placeholder(R.drawable.ic_loading))
                         .error(R.drawable.ic_broken_image)
                         .into(ivPoster)
@@ -68,6 +70,6 @@ class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
     }
 
     interface OnItemClickCallback{
-        fun onItemClicked(data: MovieDetailEntity)
+        fun onItemClicked(data: MovieEntity)
     }
 }

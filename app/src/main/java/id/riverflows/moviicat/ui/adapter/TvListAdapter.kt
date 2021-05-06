@@ -8,14 +8,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import id.riverflows.moviicat.R
 import id.riverflows.moviicat.data.entity.TvDetailEntity
+import id.riverflows.moviicat.data.entity.TvEntity
 import id.riverflows.moviicat.databinding.ItemTvGridBinding
+import id.riverflows.moviicat.di.Injection
 import id.riverflows.moviicat.util.UtilConstants
 
 class TvListAdapter: RecyclerView.Adapter<TvListAdapter.TvHolder>() {
-    private val list = mutableListOf<TvDetailEntity>()
+    private val list = mutableListOf<TvEntity>()
     private lateinit var onItemClickCallback: OnItemClickCallback
 
-    fun setList(listParam: List<TvDetailEntity>){
+    fun setList(listParam: List<TvEntity>){
         if(list.size > 0) list.clear()
         list.addAll(listParam)
         notifyDataSetChanged()
@@ -37,12 +39,12 @@ class TvListAdapter: RecyclerView.Adapter<TvListAdapter.TvHolder>() {
     override fun getItemCount(): Int = list.size
 
     inner class TvHolder(private val binding: ItemTvGridBinding): RecyclerView.ViewHolder(binding.root){
-        fun bindView(data: TvDetailEntity){
+        fun bindView(data: TvEntity){
             val context = itemView.context
-            val posterResource = context.resources.getIdentifier(data.posterPath, UtilConstants.DEF_TYPE_RAW, context.packageName)
+            val posterPath = "${Injection.providePosterPath()}${data.posterPath}"
             with(binding){
                 Glide.with(context)
-                    .load(posterResource)
+                    .load(posterPath)
                     .apply(RequestOptions().placeholder(R.drawable.ic_loading))
                     .error(R.drawable.ic_broken_image)
                     .into(ivPoster)
@@ -58,6 +60,6 @@ class TvListAdapter: RecyclerView.Adapter<TvListAdapter.TvHolder>() {
     }
 
     interface OnItemClickCallback{
-        fun onItemClicked(data: TvDetailEntity)
+        fun onItemClicked(data: TvEntity)
     }
 }

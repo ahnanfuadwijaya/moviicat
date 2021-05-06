@@ -9,4 +9,11 @@
     <string name="desc_poster">poster</string>
     <string name="title_detail_tv_show">Detail TV Show</string>
     <string name="desc_logo">Logo</string>
+    <string name="action_close">Close</string>
+    <string name="error_message_1xx">OK</string>
+    <string name="error_message_2xx">Request Success</string>
+    <string name="error_message_3xx">Redirection</string>
+    <string name="error_message_4xx">Bad Request</string>
+    <string name="error_message_5xx">Server Error</string>
+    <string name="error_message_network">Network Error</string>
 </resources>

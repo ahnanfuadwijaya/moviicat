@@ -8,12 +8,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import id.riverflows.moviicat.R
 import id.riverflows.moviicat.data.entity.TvDetailEntity
+import id.riverflows.moviicat.data.entity.TvEntity
+import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.databinding.FragmentTvBinding
+import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.adapter.TvListAdapter
 import id.riverflows.moviicat.ui.decoration.SpaceItemDecoration
 import id.riverflows.moviicat.ui.detail.tv.DetailTvActivity
 import id.riverflows.moviicat.util.UtilConstants
+import id.riverflows.moviicat.util.UtilErrorMessage
+import id.riverflows.moviicat.util.UtilSnackBar
 
 class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
     private var _binding: FragmentTvBinding? = null
@@ -41,13 +47,21 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
     }
 
     private fun obtainViewModel(){
-        val factory = ViewModelProvider.NewInstanceFactory()
+        val factory = ViewModelFactory.getInstance()
         viewModel = ViewModelProvider(this, factory)[TvViewModel::class.java]
     }
 
     private fun observeViewModel(){
         viewModel.tvList.observe(viewLifecycleOwner){
-            bindRecyclerView(it)
+            when(it){
+                is Resource.Success -> {
+                    bindRecyclerView(it.value.data)
+                }
+                is Resource.Failure -> {
+                    val message = UtilErrorMessage.getErrorMessage(requireContext(), it.code)
+                    UtilSnackBar.showIndeterminate(binding.root, message)
+                }
+            }
         }
     }
 
@@ -60,11 +74,11 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
         }
     }
 
-    private fun bindRecyclerView(list: List<TvDetailEntity>){
+    private fun bindRecyclerView(list: List<TvEntity>){
         rvAdapter.setList(list)
     }
 
-    override fun onItemClicked(data: TvDetailEntity) {
+    override fun onItemClicked(data: TvEntity) {
         startActivity(Intent(context, DetailTvActivity::class.java).putExtra(UtilConstants.EXTRA_TV_ID, data.id))
     }
 

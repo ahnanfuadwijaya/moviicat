@@ -8,12 +8,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import id.riverflows.moviicat.R
 import id.riverflows.moviicat.data.entity.MovieDetailEntity
+import id.riverflows.moviicat.data.entity.MovieEntity
+import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.databinding.FragmentMovieBinding
+import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.adapter.MovieListAdapter
 import id.riverflows.moviicat.ui.decoration.SpaceItemDecoration
 import id.riverflows.moviicat.ui.detail.movie.DetailMovieActivity
 import id.riverflows.moviicat.util.UtilConstants
+import id.riverflows.moviicat.util.UtilErrorMessage
+import id.riverflows.moviicat.util.UtilSnackBar
 
 class MovieFragment : Fragment(), MovieListAdapter.OnItemClickCallback {
     private var _binding: FragmentMovieBinding? = null
@@ -41,12 +47,21 @@ class MovieFragment : Fragment(), MovieListAdapter.OnItemClickCallback {
     }
 
     private fun obtainViewModel(){
-        viewModel = ViewModelProvider(requireActivity())[MovieViewModel::class.java]
+        val factory = ViewModelFactory.getInstance()
+        viewModel = ViewModelProvider(requireActivity(), factory)[MovieViewModel::class.java]
     }
 
     private fun observeViewModel(){
         viewModel.movieList.observe(viewLifecycleOwner){
-            bindRecyclerView(it)
+            when(it){
+                is Resource.Success -> {
+                    bindRecyclerView(it.value.data)
+                }
+                is Resource.Failure ->{
+                    val message = UtilErrorMessage.getErrorMessage(requireContext(), it.code)
+                    UtilSnackBar.showIndeterminate(binding.root, message)
+                }
+            }
         }
     }
 
@@ -59,11 +74,11 @@ class MovieFragment : Fragment(), MovieListAdapter.OnItemClickCallback {
         }
     }
 
-    private fun bindRecyclerView(list: List<MovieDetailEntity>){
+    private fun bindRecyclerView(list: List<MovieEntity>){
         rvAdapter.setList(list)
     }
 
-    override fun onItemClicked(data: MovieDetailEntity) {
+    override fun onItemClicked(data: MovieEntity) {
         startActivity(Intent(context, DetailMovieActivity::class.java).putExtra(UtilConstants.EXTRA_MOVIE_ID, data.id))
     }
 

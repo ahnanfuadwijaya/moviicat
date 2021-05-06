@@ -11,9 +11,14 @@ import com.google.android.material.chip.Chip
 import id.riverflows.moviicat.R
 import id.riverflows.moviicat.data.entity.GenreEntity
 import id.riverflows.moviicat.data.entity.MovieDetailEntity
+import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.databinding.ActivityDetailMovieBinding
+import id.riverflows.moviicat.di.Injection
+import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.util.UtilConstants
+import id.riverflows.moviicat.util.UtilErrorMessage
 import id.riverflows.moviicat.util.UtilShare
+import id.riverflows.moviicat.util.UtilSnackBar
 
 class DetailMovieActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailMovieBinding
@@ -24,29 +29,37 @@ class DetailMovieActivity : AppCompatActivity() {
         binding = ActivityDetailMovieBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title = getString(R.string.title_detail_movie)
-        val movieId = intent.getIntExtra(UtilConstants.EXTRA_MOVIE_ID, 0)
+        val movieId = intent.getLongExtra(UtilConstants.EXTRA_MOVIE_ID, 0)
         obtainViewModel()
         observeViewModel()
         viewModel.getMovie(movieId)
     }
 
     private fun obtainViewModel(){
-        val factory = ViewModelProvider.NewInstanceFactory()
+        val factory = ViewModelFactory.getInstance()
         viewModel = ViewModelProvider(viewModelStore, factory)[DetailMovieViewModel::class.java]
     }
 
     private fun observeViewModel(){
         viewModel.movie.observe(this){
-            movie = it
-            bindData()
+            when(it){
+                is Resource.Success -> {
+                    movie = it.value
+                    bindData()
+                }
+                is Resource.Failure -> {
+                    val message = UtilErrorMessage.getErrorMessage(this, it.code)
+                    UtilSnackBar.showIndeterminate(binding.root, message)
+                }
+            }
         }
     }
 
     private fun bindData(){
-        val posterResource = resources.getIdentifier(movie.posterPath, UtilConstants.DEF_TYPE_RAW, packageName)
         with(binding){
+            val posterPath = "${Injection.provideOriginalPosterPath()}${movie.posterPath}"
             Glide.with(this@DetailMovieActivity)
-                .load(posterResource)
+                .load(posterPath)
                 .apply(RequestOptions().placeholder(R.drawable.ic_loading))
                 .error(R.drawable.ic_broken_image)
                 .override(UtilConstants.DETAIL_POSTER_WIDTH,UtilConstants.DETAIL_POSTER_HEIGHT)
