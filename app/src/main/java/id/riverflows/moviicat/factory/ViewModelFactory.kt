@@ -1,12 +1,7 @@
 package id.riverflows.moviicat.factory
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import id.riverflows.moviicat.data.source.remote.ApiBuilder
-import id.riverflows.moviicat.data.source.remote.api.DetailApiService
-import id.riverflows.moviicat.data.source.remote.api.ListApiService
-import id.riverflows.moviicat.data.source.repository.BaseRepository
 import id.riverflows.moviicat.data.source.repository.DetailRepository
 import id.riverflows.moviicat.data.source.repository.ListRepository
 import id.riverflows.moviicat.di.Injection

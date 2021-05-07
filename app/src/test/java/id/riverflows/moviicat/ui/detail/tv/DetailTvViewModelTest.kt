@@ -2,7 +2,7 @@ package id.riverflows.moviicat.ui.detail.tv
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import id.riverflows.moviicat.data.entity.TvDetailEntity
+import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
 import id.riverflows.moviicat.util.DataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +41,7 @@ class DetailTvViewModelTest{
     @Suppress("UNCHECKED_CAST")
     fun getDetailTv() {
         val tv = DataDummy.getTv(tvId)
-        val observer = mock(Observer::class.java) as Observer<TvDetailEntity>
+        val observer = mock(Observer::class.java) as Observer<TvDetailResponse>
         viewModel.tv.observeForever(observer)
         runBlocking {
             viewModel.getTv(tvId)

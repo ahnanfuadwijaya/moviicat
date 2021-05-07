@@ -3,27 +3,26 @@ package id.riverflows.moviicat.data.source.remote.response
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import id.riverflows.moviicat.data.entity.GenreEntity
-import id.riverflows.moviicat.data.entity.MovieDetailEntity
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class MovieDetailResponse(
     @field:SerializedName("id")
-    val id: Long,
+        val id: Long,
     @field:SerializedName("title")
-    val title: String,
+        val title: String,
     @field:SerializedName("genres")
-    val genres: List<GenreEntity>,
+        val genres: List<GenreEntity>,
     @field:SerializedName("overview")
-    val overview: String?,
+        val overview: String?,
     @field:SerializedName("popularity")
-    val popularity: Float,
+        val popularity: Float,
     @field:SerializedName("poster_path")
-    val posterPath: String?,
+        val posterPath: String?,
     @field:SerializedName("release_date")
-    val releaseDate: String,
+        val releaseDate: String,
     @field:SerializedName("status")
-    val status: String,
+        val status: String,
     @field:SerializedName("vote_average")
-    val voteAverage: Float,
+        val voteAverage: Float,
 ): Parcelable

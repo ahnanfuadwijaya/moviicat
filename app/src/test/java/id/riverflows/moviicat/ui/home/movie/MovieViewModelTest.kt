@@ -2,7 +2,7 @@ package id.riverflows.moviicat.ui.home.movie
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import id.riverflows.moviicat.data.entity.MovieDetailEntity
+import id.riverflows.moviicat.data.source.remote.response.MovieDetailResponse
 import id.riverflows.moviicat.util.DataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +41,7 @@ class MovieViewModelTest {
     @Test
     fun getMovieList() {
         val list = DataDummy.getMovieList()
-        val observer = mock(Observer::class.java) as Observer<List<MovieDetailEntity>>
+        val observer = mock(Observer::class.java) as Observer<List<MovieDetailResponse>>
         viewModel.movieList.observeForever(observer)
         runBlocking {
             viewModel.getMovieList()

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/space_small">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_normal">
+
+        <ImageView
+            android:id="@+id/shimmer_iv_poster"
+            style="@style/RVItemPoster.Shimmer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/desc_poster" />
+
+        <TextView
+            android:id="@+id/shimmer_tv_name"
+            style="@style/RVItemTitle.Shimmer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shimmer_iv_poster" />
+
+        <TextView
+            android:id="@+id/shimmer_tv_first_air_date"
+            style="@style/RVItemField.Shimmer"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/shimmer_tv_name"
+            app:layout_constraintTop_toBottomOf="@+id/shimmer_tv_name" />
+
+        <FrameLayout
+            android:id="@+id/shimmer_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/space_very_tiny"
+            app:layout_constraintBottom_toTopOf="@+id/shimmer_tv_name"
+            app:layout_constraintStart_toStartOf="@+id/shimmer_tv_name">
+
+            <ImageView
+                android:id="@+id/shimmer_iv_score"
+                style="@style/RVItemIvScore.Shimmer"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/shimmer_tv_score"
+                style="@style/RVItemScore.Shimmer"/>
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

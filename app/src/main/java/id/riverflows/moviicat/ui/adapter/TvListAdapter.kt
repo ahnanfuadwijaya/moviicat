@@ -7,11 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import id.riverflows.moviicat.R
-import id.riverflows.moviicat.data.entity.TvDetailEntity
 import id.riverflows.moviicat.data.entity.TvEntity
 import id.riverflows.moviicat.databinding.ItemTvGridBinding
 import id.riverflows.moviicat.di.Injection
-import id.riverflows.moviicat.util.UtilConstants
 
 class TvListAdapter: RecyclerView.Adapter<TvListAdapter.TvHolder>() {
     private val list = mutableListOf<TvEntity>()

@@ -3,21 +3,21 @@
 package id.riverflows.moviicat.util
 
 import id.riverflows.moviicat.data.entity.GenreEntity
-import id.riverflows.moviicat.data.entity.MovieDetailEntity
-import id.riverflows.moviicat.data.entity.TvDetailEntity
+import id.riverflows.moviicat.data.source.remote.response.MovieDetailResponse
+import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
 
 object DataDummy {
-    private val movieList = mutableListOf<MovieDetailEntity>()
-    private val tvList = mutableListOf<TvDetailEntity>()
+    private val movieList = mutableListOf<MovieDetailResponse>()
+    private val tvList = mutableListOf<TvDetailResponse>()
     init {
         movieList.addAll(generateMovieData())
         tvList.addAll(generateTvData())
     }
 
-    private fun generateMovieData(): List<MovieDetailEntity>{
-        val list = mutableListOf<MovieDetailEntity>()
+    private fun generateMovieData(): List<MovieDetailResponse>{
+        val list = mutableListOf<MovieDetailResponse>()
         list.add(
-                MovieDetailEntity(
+                MovieDetailResponse(
                         399566,
                         "Godzilla vs. Kong",
                         listOf(GenreEntity( 28, "Action"), GenreEntity(878, "Science Fiction")),
@@ -30,7 +30,7 @@ object DataDummy {
                 )
         )
         list.add(
-                MovieDetailEntity(
+                MovieDetailResponse(
                         791373,
                         "Zack Snyder's Justice League",
                         listOf(GenreEntity(28, "Action"), GenreEntity(12, "Adventure"), GenreEntity(14,"Fantasy"), GenreEntity(878, "Science Fiction")),
@@ -43,7 +43,7 @@ object DataDummy {
                 )
         )
         list.add(
-                MovieDetailEntity(
+                MovieDetailResponse(
                         412656,
                         "Chaos Walking",
                         listOf(GenreEntity(878, "Science Fiction"), GenreEntity(28, "Action"), GenreEntity(12, "Adventure"), GenreEntity(53, "Thriller")),
@@ -54,7 +54,7 @@ object DataDummy {
                 )
         )
         list.add(
-                MovieDetailEntity(
+                MovieDetailResponse(
                         460465,
                         "Mortal Kombat",
                         listOf(GenreEntity(14, "Fantasy"), GenreEntity(28, "Action"), GenreEntity(12, "Adventure")),
@@ -66,7 +66,8 @@ object DataDummy {
                         7.5f
                 )
         )
-        list.add(MovieDetailEntity(
+        list.add(
+            MovieDetailResponse(
                 527774,
                 "Raya and the Last Dragon",
                 listOf(GenreEntity(16, "Animation"), GenreEntity(12,"Adventure"), GenreEntity(14, "Fantasy"), GenreEntity(10751, "Family"), GenreEntity(28, "Action")),
@@ -76,8 +77,10 @@ object DataDummy {
                 "2021-03-03",
                 "Released",
                 8.3f
-        ))
-        list.add(MovieDetailEntity(
+        )
+        )
+        list.add(
+            MovieDetailResponse(
                 664767,
                 "Mortal Kombat Legends: Scorpion's Revenge",
                 listOf(GenreEntity(16, "Animation"), GenreEntity(28, "Action"), GenreEntity(14, "Fantasy")),
@@ -87,8 +90,10 @@ object DataDummy {
                 "2020-04-12",
                 "Released",
                 8.4f
-        ))
-        list.add(MovieDetailEntity(
+        )
+        )
+        list.add(
+            MovieDetailResponse(
                 644083,
                 "Twist",
                 listOf(GenreEntity(80, "Crime"), GenreEntity(18, "Drama"), GenreEntity(28, "Action")),
@@ -98,8 +103,10 @@ object DataDummy {
                 "2021-01-22",
                 "Released",
                 7.1f
-        ))
-        list.add(MovieDetailEntity(
+        )
+        )
+        list.add(
+            MovieDetailResponse(
                 544401,
                 "Cherry",
                 listOf(GenreEntity(80, "Crime"), GenreEntity(18, "Drama")),
@@ -109,8 +116,10 @@ object DataDummy {
                 "2021-02-26",
                 "Released",
                 7.6f
-        ))
-        list.add(MovieDetailEntity(
+        )
+        )
+        list.add(
+            MovieDetailResponse(
                 587807,
                 "Tom & Jerry",
                 listOf(GenreEntity(35, "Comedy"), GenreEntity(10751, "Family"), GenreEntity(16, "Animation")),
@@ -120,8 +129,10 @@ object DataDummy {
                 "2021-02-11",
                 "Released",
                 7.3f
-        ))
-        list.add(MovieDetailEntity(
+        )
+        )
+        list.add(
+            MovieDetailResponse(
                 458576,
                 "Monster Hunter",
                 listOf(GenreEntity(14, "Fantasy"), GenreEntity(28, "Action"), GenreEntity(12, "Adventure")),
@@ -131,8 +142,10 @@ object DataDummy {
                 "2020-12-03",
                 "Released",
                 7.1f
-        ))
-        list.add(MovieDetailEntity(
+        )
+        )
+        list.add(
+            MovieDetailResponse(
                 581389,
                 "Space Sweepers",
                 listOf(GenreEntity(18, "Drama"), GenreEntity(14, "Fantasy"), GenreEntity(878, "Science Fiction")),
@@ -142,13 +155,15 @@ object DataDummy {
                 "2021-02-05",
                 "Released",
                 7.2f
-        ))
+        )
+        )
         return list
     }
 
-    private fun generateTvData(): List<TvDetailEntity>{
-        val list = mutableListOf<TvDetailEntity>()
-        list.add(TvDetailEntity(
+    private fun generateTvData(): List<TvDetailResponse>{
+        val list = mutableListOf<TvDetailResponse>()
+        list.add(
+            TvDetailResponse(
                 88396,
                 "The Falcon and the Winter Soldier",
                 listOf(GenreEntity(10765, "Sci-Fi & Fantasy"), GenreEntity(10759, "Action & Adventure"), GenreEntity(18, "Drama"), GenreEntity(10768, "War & Politics")),
@@ -159,8 +174,10 @@ object DataDummy {
                 7013.338f,
                 "Returning Series",
                 7.9f
-        ))
-        list.add(TvDetailEntity(
+        )
+        )
+        list.add(
+            TvDetailResponse(
                 71712,
                 "The Good Doctor",
                 listOf(GenreEntity(18, "Drama")),
@@ -171,8 +188,10 @@ object DataDummy {
                 1881.58f,
                 "Returning Series",
                 8.6f
-        ))
-        list.add(TvDetailEntity(
+        )
+        )
+        list.add(
+            TvDetailResponse(
                 60735,
                 "The Flash",
                 listOf(GenreEntity(18, "Drama"), GenreEntity(10765, "Sci-Fi & Fantasy")),
@@ -183,8 +202,10 @@ object DataDummy {
                 1308.643f,
                 "Returning Series",
                 7.7f
-        ))
-        list.add(TvDetailEntity(
+        )
+        )
+        list.add(
+            TvDetailResponse(
                 95557,
                 "Invincible",
                 listOf(GenreEntity(16, "Animation"), GenreEntity(10759, "Action & Adventure"), GenreEntity(18, "Drama")),
@@ -195,8 +216,10 @@ object DataDummy {
                 1313.434f,
                 "Returning Series",
                 8.9f
-        ))
-        list.add(TvDetailEntity(
+        )
+        )
+        list.add(
+            TvDetailResponse(
                 69050,
                 "Riverdale",
                 listOf(GenreEntity(9648, "Mystery"), GenreEntity(18, "Drama"), GenreEntity(80, "Crime")),
@@ -207,8 +230,10 @@ object DataDummy {
                 983.102f,
                 "Returning Series",
                 8.6f
-        ))
-        list.add(TvDetailEntity(
+        )
+        )
+        list.add(
+            TvDetailResponse(
                 0,
                 "Grey's Anatomy",
                 listOf(GenreEntity(18, "Drama")),
@@ -219,8 +244,10 @@ object DataDummy {
                 994.98f,
                 "Returning Series",
                 8.2f
-        ))
-        list.add(TvDetailEntity(
+        )
+        )
+        list.add(
+            TvDetailResponse(
                 63174,
                 "Lucifer",
                 listOf(GenreEntity(80, "Crime"), GenreEntity(10765, "Sci-Fi & Fantasy")),
@@ -231,8 +258,10 @@ object DataDummy {
                 876.319f,
                 "Returning Series",
                 8.5f
-        ))
-        list.add(TvDetailEntity(
+        )
+        )
+        list.add(
+            TvDetailResponse(
                 1402,
                 "The Walking Dead",
                 listOf(GenreEntity(10759, "Action & Adventure"), GenreEntity(18, "Drama"), GenreEntity(10765, "Sci-Fi & Fantasy")),
@@ -243,8 +272,10 @@ object DataDummy {
                 755.255f,
                 "Returning Series",
                 8.1f
-        ))
-        list.add(TvDetailEntity(
+        )
+        )
+        list.add(
+            TvDetailResponse(
                 95057,
                 "Superman & Lois",
                 listOf(GenreEntity(10759, "Action & Adventure"), GenreEntity(10765, "Sci-Fi & Fantasy")),
@@ -255,8 +286,10 @@ object DataDummy {
                 764.008f,
                 "Returning Series",
                 8.3f
-        ))
-        list.add(TvDetailEntity(
+        )
+        )
+        list.add(
+            TvDetailResponse(
                 120168,
                 "Who Killed Sara?",
                 listOf(GenreEntity(18, "Drama"), GenreEntity(80, "Crime"), GenreEntity(9648, "Mystery")),
@@ -267,8 +300,10 @@ object DataDummy {
                 767.618f,
                 "Returning Series",
                 7.9f
-        ))
-        list.add(TvDetailEntity(
+        )
+        )
+        list.add(
+            TvDetailResponse(
                 85271,
                 "WandaVision",
                 listOf(GenreEntity(10765, "Sci-Fi & Fantasy"), GenreEntity(9648, "mystery"), GenreEntity(18, "Drama")),
@@ -279,19 +314,20 @@ object DataDummy {
                 730.166f,
                 "Ended",
                 8.4f
-        ))
+        )
+        )
         return list
     }
 
-    fun getMovieList(): List<MovieDetailEntity> = movieList
-    fun getTvList(): List<TvDetailEntity> = tvList
-    fun getMovie(movieId: Long): MovieDetailEntity?{
+    fun getMovieList(): List<MovieDetailResponse> = movieList
+    fun getTvList(): List<TvDetailResponse> = tvList
+    fun getMovie(movieId: Long): MovieDetailResponse?{
         for(item in movieList){
             if(item.id == movieId) return item
         }
         return null
     }
-    fun getTv(tvId: Long): TvDetailEntity?{
+    fun getTv(tvId: Long): TvDetailResponse?{
         for(item in tvList){
             if(item.id == tvId) return item
         }

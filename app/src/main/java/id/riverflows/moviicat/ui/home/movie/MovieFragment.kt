@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import id.riverflows.moviicat.R
-import id.riverflows.moviicat.data.entity.MovieDetailEntity
 import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.databinding.FragmentMovieBinding
@@ -38,8 +36,13 @@ class MovieFragment : Fragment(), MovieListAdapter.OnItemClickCallback {
         bindInterface()
         obtainViewModel()
         observeViewModel()
-        populateRecyclerView()
+        setupRecyclerView()
+        requestData()
+    }
+
+    private fun requestData(){
         viewModel.getMovieList()
+        setLoadingState(true)
     }
 
     private fun bindInterface(){
@@ -53,6 +56,7 @@ class MovieFragment : Fragment(), MovieListAdapter.OnItemClickCallback {
 
     private fun observeViewModel(){
         viewModel.movieList.observe(viewLifecycleOwner){
+            setLoadingState(false)
             when(it){
                 is Resource.Success -> {
                     bindRecyclerView(it.value.data)
@@ -65,7 +69,7 @@ class MovieFragment : Fragment(), MovieListAdapter.OnItemClickCallback {
         }
     }
 
-    private fun populateRecyclerView(){
+    private fun setupRecyclerView(){
         with(binding.rvMovies){
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(context, UtilConstants.GRID_MOVIE_COUNT)
@@ -80,6 +84,18 @@ class MovieFragment : Fragment(), MovieListAdapter.OnItemClickCallback {
 
     override fun onItemClicked(data: MovieEntity) {
         startActivity(Intent(context, DetailMovieActivity::class.java).putExtra(UtilConstants.EXTRA_MOVIE_ID, data.id))
+    }
+
+    private fun setLoadingState(isLoading: Boolean){
+        with(binding.shimmerContainer){
+            visibility = if(isLoading){
+                startShimmerAnimation()
+                View.VISIBLE
+            }else{
+                stopShimmerAnimation()
+                View.INVISIBLE
+            }
+        }
     }
 
     override fun onDestroy() {

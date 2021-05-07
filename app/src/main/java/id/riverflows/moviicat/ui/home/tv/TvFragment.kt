@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import id.riverflows.moviicat.R
-import id.riverflows.moviicat.data.entity.TvDetailEntity
 import id.riverflows.moviicat.data.entity.TvEntity
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.databinding.FragmentTvBinding
@@ -38,8 +36,13 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
         bindInterface()
         obtainViewModel()
         observeViewModel()
-        initiateRecyclerView()
+        setupRecyclerView()
+        requestData()
+    }
+
+    private fun requestData(){
         viewModel.getTvList()
+        setLoadingState(true)
     }
 
     private fun bindInterface(){
@@ -53,6 +56,7 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
 
     private fun observeViewModel(){
         viewModel.tvList.observe(viewLifecycleOwner){
+            setLoadingState(false)
             when(it){
                 is Resource.Success -> {
                     bindRecyclerView(it.value.data)
@@ -65,7 +69,7 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
         }
     }
 
-    private fun initiateRecyclerView(){
+    private fun setupRecyclerView(){
         with(binding.rvTvShows){
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(context, UtilConstants.GRID_TV_COUNT)
@@ -80,6 +84,18 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
 
     override fun onItemClicked(data: TvEntity) {
         startActivity(Intent(context, DetailTvActivity::class.java).putExtra(UtilConstants.EXTRA_TV_ID, data.id))
+    }
+
+    private fun setLoadingState(isLoading: Boolean){
+        with(binding.shimmerContainer){
+            visibility = if(isLoading){
+                startShimmerAnimation()
+                View.VISIBLE
+            }else{
+                stopShimmerAnimation()
+                View.INVISIBLE
+            }
+        }
     }
 
     override fun onDestroy() {

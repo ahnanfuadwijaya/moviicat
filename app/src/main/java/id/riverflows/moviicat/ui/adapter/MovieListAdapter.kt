@@ -7,11 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import id.riverflows.moviicat.R
-import id.riverflows.moviicat.data.entity.MovieDetailEntity
 import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.databinding.ItemMovieGridBinding
 import id.riverflows.moviicat.di.Injection
-import id.riverflows.moviicat.util.UtilConstants
 
 
 class MovieListAdapter: RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {

@@ -2,7 +2,7 @@ package id.riverflows.moviicat.ui.home.tv
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import id.riverflows.moviicat.data.entity.TvDetailEntity
+import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
 import id.riverflows.moviicat.util.DataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +40,7 @@ class TvViewModelTest {
     @Test
     fun getTvList() {
         val list = DataDummy.getTvList()
-        val observer = mock(Observer::class.java) as Observer<List<TvDetailEntity>>
+        val observer = mock(Observer::class.java) as Observer<List<TvDetailResponse>>
         viewModel.tvList.observeForever(observer)
         runBlocking {
             viewModel.getTvList()
