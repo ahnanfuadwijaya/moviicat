@@ -2,7 +2,10 @@ package id.riverflows.moviicat.ui.home.tv
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
+import id.riverflows.moviicat.data.source.remote.response.TvListResponse
+import id.riverflows.moviicat.data.source.repository.ListRepository
 import id.riverflows.moviicat.util.DataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +27,7 @@ import org.mockito.Mockito.verify
 @ExperimentalCoroutinesApi
 class TvViewModelTest {
     private lateinit var viewModel: TvViewModel
+    private val repository = mock(ListRepository::class.java)
     @get:Rule
     val coroutineScope =  MainCoroutineScopeRule()
     @get:Rule
@@ -32,15 +36,15 @@ class TvViewModelTest {
 
     @Before
     fun setup(){
-        viewModel = TvViewModel()
+        viewModel = TvViewModel(repository)
         Dispatchers.setMain(testDispatcher)
     }
 
     @Suppress("UNCHECKED_CAST")
     @Test
     fun getTvList() {
-        val list = DataDummy.getTvList()
-        val observer = mock(Observer::class.java) as Observer<List<TvDetailResponse>>
+        val list = DataDummy.getTvList() as Resource<TvListResponse>
+        val observer = mock(Observer::class.java) as Observer<Resource<TvListResponse>>
         viewModel.tvList.observeForever(observer)
         runBlocking {
             viewModel.getTvList()
@@ -48,7 +52,6 @@ class TvViewModelTest {
             verify(observer).onChanged(list)
             assertNotNull(viewModel.tvList.value)
             assertEquals(viewModel.tvList.value, list)
-            assertEquals(viewModel.tvList.value?.size, list.size)
             viewModel.tvList.removeObserver(observer)
         }
     }

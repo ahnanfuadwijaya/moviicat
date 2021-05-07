@@ -2,7 +2,10 @@ package id.riverflows.moviicat.ui.home.movie
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.response.MovieDetailResponse
+import id.riverflows.moviicat.data.source.remote.response.MovieListResponse
+import id.riverflows.moviicat.data.source.repository.ListRepository
 import id.riverflows.moviicat.util.DataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import kotlinx.coroutines.Dispatchers
@@ -30,18 +33,19 @@ class MovieViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
     private val testDispatcher = TestCoroutineDispatcher()
+    private val repository = mock(ListRepository::class.java)
 
     @Before
     fun setup(){
-        viewModel = MovieViewModel()
+        viewModel = MovieViewModel(repository)
         Dispatchers.setMain(testDispatcher)
     }
 
     @Suppress("UNCHECKED_CAST")
     @Test
     fun getMovieList() {
-        val list = DataDummy.getMovieList()
-        val observer = mock(Observer::class.java) as Observer<List<MovieDetailResponse>>
+        val list = DataDummy.getMovieList() as Resource<MovieListResponse>
+        val observer = mock(Observer::class.java) as Observer<Resource<MovieListResponse>>
         viewModel.movieList.observeForever(observer)
         runBlocking {
             viewModel.getMovieList()
@@ -49,7 +53,6 @@ class MovieViewModelTest {
             verify(observer).onChanged(list)
             assertNotNull(viewModel.movieList.value)
             assertEquals(viewModel.movieList.value, list)
-            assertEquals(viewModel.movieList.value?.size, list.size)
             viewModel.movieList.removeObserver(observer)
         }
     }

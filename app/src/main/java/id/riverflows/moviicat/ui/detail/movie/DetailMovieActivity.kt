@@ -17,10 +17,7 @@ import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.databinding.ActivityDetailMovieBinding
 import id.riverflows.moviicat.di.Injection
 import id.riverflows.moviicat.factory.ViewModelFactory
-import id.riverflows.moviicat.util.UtilConstants
-import id.riverflows.moviicat.util.UtilErrorMessage
-import id.riverflows.moviicat.util.UtilShare
-import id.riverflows.moviicat.util.UtilSnackBar
+import id.riverflows.moviicat.util.*
 import timber.log.Timber
 
 class DetailMovieActivity : AppCompatActivity() {
@@ -50,11 +47,13 @@ class DetailMovieActivity : AppCompatActivity() {
         val movieId = intent.getLongExtra(UtilConstants.EXTRA_MOVIE_ID, 0)
         viewModel.getMovie(movieId)
         setLoadingState(true)
+        EspressoIdlingResource.increment()
     }
 
     private fun observeViewModel(){
         viewModel.movie.observe(this){
             setLoadingState(false)
+            EspressoIdlingResource.decrement()
             when(it){
                 is Resource.Success -> {
                     bindData(it.value)
