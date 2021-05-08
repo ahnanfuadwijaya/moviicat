@@ -2,7 +2,7 @@ package id.riverflows.moviicat.util
 
 import androidx.test.espresso.idling.CountingIdlingResource
 
-object EspressoIdlingResource {
+object UtilIdlingResource {
     private const val RESOURCE = "GLOBAL"
     val idlingResource = CountingIdlingResource(RESOURCE)
 

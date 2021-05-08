@@ -8,7 +8,7 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import id.riverflows.moviicat.R
-import id.riverflows.moviicat.util.DataDummy
+import id.riverflows.moviicat.util.UtilDataDummy
 import id.riverflows.moviicat.util.UtilConstants
 import org.junit.After
 import org.junit.Before
@@ -16,7 +16,7 @@ import org.junit.Test
 
 class DetailTvActivityTest{
     private lateinit var activityScenario: ActivityScenario<DetailTvActivity>
-    private val tvList = DataDummy.getTvList()
+    private val tvList = UtilDataDummy.getTvList()
 
     @Before
     fun setup(){

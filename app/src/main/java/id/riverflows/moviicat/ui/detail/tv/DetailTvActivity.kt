@@ -17,7 +17,6 @@ import id.riverflows.moviicat.databinding.ActivityDetailTvBinding
 import id.riverflows.moviicat.di.Injection
 import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.util.*
-import timber.log.Timber
 
 class DetailTvActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailTvBinding
@@ -46,13 +45,13 @@ class DetailTvActivity : AppCompatActivity() {
         val tvId = intent.getLongExtra(UtilConstants.EXTRA_TV_ID, 0)
         viewModel.getTv(tvId)
         setLoadingState(true)
-        EspressoIdlingResource.increment()
+        UtilIdlingResource.increment()
     }
 
     private fun observeViewModel(){
         viewModel.tv.observe(this){
             setLoadingState(false)
-            EspressoIdlingResource.decrement()
+            UtilIdlingResource.decrement()
             when(it){
                 is Resource.Success -> {
                     bindData(it.value)

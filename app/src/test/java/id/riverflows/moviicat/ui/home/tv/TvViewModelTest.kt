@@ -2,11 +2,11 @@ package id.riverflows.moviicat.ui.home.tv
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.nhaarman.mockitokotlin2.verify
 import id.riverflows.moviicat.data.source.remote.Resource
-import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
 import id.riverflows.moviicat.data.source.remote.response.TvListResponse
 import id.riverflows.moviicat.data.source.repository.ListRepository
-import id.riverflows.moviicat.util.DataDummy
+import id.riverflows.moviicat.util.UtilDataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,24 +15,32 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+import org.hamcrest.core.IsInstanceOf
+import org.hamcrest.core.IsInstanceOf.instanceOf
+import org.junit.*
+import org.junit.Assert.*
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
+import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
+@RunWith(MockitoJUnitRunner::class)
 class TvViewModelTest {
     private lateinit var viewModel: TvViewModel
-    private val repository = mock(ListRepository::class.java)
     @get:Rule
     val coroutineScope =  MainCoroutineScopeRule()
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+    @Mock
+    private lateinit var observer: Observer<Resource<TvListResponse>>
+    @Mock
+    private lateinit var repository: ListRepository
     private val testDispatcher = TestCoroutineDispatcher()
+    private val dummyPage = 1
+    private val dummyTotalPages = 1
+    private val dummyTotalResults = 2
+    private val dummyHttpErrorCode = 401
 
     @Before
     fun setup(){
@@ -40,18 +48,59 @@ class TvViewModelTest {
         Dispatchers.setMain(testDispatcher)
     }
 
-    @Suppress("UNCHECKED_CAST")
     @Test
-    fun getTvList() {
-        val list = DataDummy.getTvList() as Resource<TvListResponse>
-        val observer = mock(Observer::class.java) as Observer<Resource<TvListResponse>>
+    fun getSuccessTvList() {
+        val dummyList = UtilDataDummy.getTvList()
+        val dummySuccessResponse = Resource.Success(TvListResponse(dummyPage, dummyList, dummyTotalPages, dummyTotalResults))
         viewModel.tvList.observeForever(observer)
         runBlocking {
+            `when`(repository.getTvList()).thenReturn(dummySuccessResponse)
             viewModel.getTvList()
             delay(500)
-            verify(observer).onChanged(list)
-            assertNotNull(viewModel.tvList.value)
-            assertEquals(viewModel.tvList.value, list)
+            verify(observer).onChanged(dummySuccessResponse)
+            val response = viewModel.tvList.value as Resource.Success<TvListResponse>
+            assertNotNull(response)
+            assertThat(
+                response.value,
+                instanceOf(TvListResponse::class.java)
+            )
+            assertEquals(response.value.data, dummyList)
+            assertEquals(response.value.data.size, dummyList.size)
+            viewModel.tvList.removeObserver(observer)
+        }
+    }
+
+    @Test
+    fun getNetworkErrorTvList(){
+        val dummyNetworkErrorResponse = Resource.Failure(null)
+        viewModel.tvList.observeForever(observer)
+        runBlocking {
+            `when`(repository.getTvList()).thenReturn(dummyNetworkErrorResponse)
+            viewModel.getTvList()
+            delay(500)
+            verify(observer).onChanged(dummyNetworkErrorResponse)
+            val response = viewModel.tvList.value as Resource.Failure
+            assertNotNull(response)
+            assertThat(response, instanceOf(Resource.Failure::class.java))
+            assertNull(response.code)
+            viewModel.tvList.removeObserver(observer)
+        }
+    }
+
+    @Test
+    fun getHttpErrorTvList(){
+        val dummyHttpErrorResponse = Resource.Failure(dummyHttpErrorCode)
+        viewModel.tvList.observeForever(observer)
+        runBlocking {
+            `when`(repository.getTvList()).thenReturn(dummyHttpErrorResponse)
+            viewModel.getTvList()
+            delay(500)
+            verify(observer).onChanged(dummyHttpErrorResponse)
+            val response = viewModel.tvList.value as Resource.Failure
+            assertNotNull(response)
+            assertThat(response, instanceOf(Resource.Failure::class.java))
+            assertNotNull(response.code)
+            assertTrue(response.code in 100..599)
             viewModel.tvList.removeObserver(observer)
         }
     }

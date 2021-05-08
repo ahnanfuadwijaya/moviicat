@@ -1,24 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.MoviiCat" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorPrimary">@color/light_grey_500</item>
+        <item name="colorPrimaryVariant">@color/light_grey_700</item>
         <item name="colorOnPrimary">@color/black</item>
-        <item name="colorSecondary">@color/secondary_light</item>
-        <item name="colorSecondaryVariant">@color/secondary_dark</item>
+        <item name="colorSecondary">@color/dark_grey_200</item>
+        <item name="colorSecondaryVariant">@color/dark_grey_700</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <item name="statusBarBackground">@color/primary_light</item>
+        <item name="statusBarBackground">@color/light_grey_200</item>
         <item name="colorAccent">@color/black</item>
-        <item name="colorSwitchThumbNormal">@color/primary</item>
+        <item name="colorSwitchThumbNormal">@color/light_grey_500</item>
     </style>
     <style name="SplashStyle">
-        <item name="android:background">@color/primary_light</item>
+        <item name="android:background">@color/light_grey_200</item>
     </style>
     <style name="TabLayoutStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/space_big</item>
-        <item name="android:background">@color/primary_light</item>
+        <item name="android:background">@color/light_grey_200</item>
         <item name="tabTextColor">@color/black</item>
         <item name="tabIndicatorColor">@color/black</item>
     </style>
@@ -27,7 +27,7 @@
         <item name="android:layout_width">@dimen/item_poster_width</item>
     </style>
     <style name="RVItemPoster.Shimmer">
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
     </style>
     <style name="RVItemTitle">
         <item name="android:layout_height">wrap_content</item>
@@ -40,7 +40,7 @@
         <item name="android:textColor">@color/black</item>
     </style>
     <style name="RVItemTitle.Shimmer">
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
     </style>
     <style name="RVItemScore">
         <item name="android:layout_height">wrap_content</item>
@@ -51,14 +51,14 @@
         <item name="android:textColor">@color/black</item>
     </style>
     <style name="RVItemScore.Shimmer">
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
     </style>
     <style name="RVItemIvScore">
         <item name="android:layout_width">@dimen/item_progress_size</item>
         <item name="android:layout_height">@dimen/item_progress_size</item>
     </style>
     <style name="RVItemIvScore.Shimmer">
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
     </style>
     <style name="RVItemField">
         <item name="android:layout_height">wrap_content</item>
@@ -69,12 +69,12 @@
         <item name="android:textSize">@dimen/text_size_item_field</item>
     </style>
     <style name="RVItemField.Shimmer">
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
     </style>
     <style name="ToolbarStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:background">@color/primary</item>
+        <item name="android:background">@color/light_grey_500</item>
         <item name="layout_scrollFlags">scroll|enterAlways</item>
         <item name="layout_collapseMode">none</item>
     </style>
@@ -84,7 +84,7 @@
         <item name="android:minHeight">@dimen/detail_poster_min_height</item>
     </style>
     <style name="DetailPoster.Shimmer">
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
     </style>
     <style name="DetailOverviewField">
         <item name="android:layout_width">match_parent</item>
@@ -92,7 +92,7 @@
     </style>
     <style name="DetailOverviewField.Shimmer">
         <item name="android:layout_height">@dimen/shimmer_detail_field_height</item>
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
     </style>
     <style name="DetailOverviewValue">
         <item name="android:layout_width">match_parent</item>
@@ -100,7 +100,7 @@
         <item name="android:textSize">@dimen/text_size_detail_field</item>
     </style>
     <style name="DetailOverviewValue.Shimmer">
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
         <item name="android:layout_height">@dimen/shimmer_detail_field_height</item>
     </style>
     <style name="DetailTitle">
@@ -114,7 +114,7 @@
         <item name="android:textColor">@color/black</item>
     </style>
     <style name="DetailTitle.Shimmer">
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
     </style>
     <style name="DetailField">
         <item name="android:layout_height">wrap_content</item>
@@ -130,11 +130,11 @@
         <item name="android:scrollbars">none</item>
     </style>
     <style name="DetailRootContainerChips.Shimmer">
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
     </style>
     <style name="DetailField.Shimmer">
         <item name="android:layout_width">@dimen/shimmer_detail_field_width</item>
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
     </style>
     <style name="DetailChipGroup">
         <item name="android:layout_width">wrap_content</item>
@@ -148,7 +148,7 @@
         <item name="android:textColor">@color/black</item>
     </style>
     <style name="DetailSeparator.Shimmer">
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
     </style>
     <style name="GenreChip" parent="Widget.MaterialComponents.Chip.Action">
         <item name="android:layout_width">wrap_content</item>
@@ -157,6 +157,6 @@
         <item name="android:padding">@dimen/space_small</item>
     </style>
     <style name="GenreChip.Shimmer">
-        <item name="android:background">@color/secondary_light</item>
+        <item name="android:background">@color/dark_grey_200</item>
     </style>
 </resources>

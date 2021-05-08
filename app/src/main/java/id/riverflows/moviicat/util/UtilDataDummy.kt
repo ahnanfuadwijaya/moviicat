@@ -3,22 +3,28 @@
 package id.riverflows.moviicat.util
 
 import id.riverflows.moviicat.data.entity.GenreEntity
+import id.riverflows.moviicat.data.entity.MovieEntity
+import id.riverflows.moviicat.data.entity.TvEntity
 import id.riverflows.moviicat.data.source.remote.response.MovieDetailResponse
 import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
 
-object DataDummy {
-    private val movieList = mutableListOf<MovieDetailResponse>()
-    private val tvList = mutableListOf<TvDetailResponse>()
+object UtilDataDummy {
+    private val movieList = mutableListOf<MovieEntity>()
+    private val tvList = mutableListOf<TvEntity>()
+    private val movieDetailList = mutableListOf<MovieDetailResponse>()
+    private val tvDetailList = mutableListOf<TvDetailResponse>()
     init {
-        movieList.addAll(generateMovieData())
-        tvList.addAll(generateTvData())
+        movieList.addAll(generateDummyMovieList())
+        tvList.addAll(generateDummyTvList())
+        movieDetailList.addAll(generateMovieDetailList())
+        tvDetailList.addAll(generateTvDetailList())
     }
 
-    private fun generateMovieData(): List<MovieDetailResponse>{
+    private fun generateMovieDetailList(): List<MovieDetailResponse>{
         val list = mutableListOf<MovieDetailResponse>()
         list.add(
                 MovieDetailResponse(
-                        399566,
+                        399566L,
                         "Godzilla vs. Kong",
                         listOf(GenreEntity( 28, "Action"), GenreEntity(878, "Science Fiction")),
                         "In a time when monsters walk the Earth, humanity’s fight for its future sets Godzilla and Kong on a collision course that will see the two most powerful forces of nature on the planet collide in a spectacular battle for the ages.",
@@ -160,7 +166,7 @@ object DataDummy {
         return list
     }
 
-    private fun generateTvData(): List<TvDetailResponse>{
+    private fun generateTvDetailList(): List<TvDetailResponse>{
         val list = mutableListOf<TvDetailResponse>()
         list.add(
             TvDetailResponse(
@@ -299,9 +305,7 @@ object DataDummy {
                 "Hell-bent on exacting revenge and proving he was framed for his sister's murder, Álex sets out to unearth much more than the crime's real culprit.",
                 767.618f,
                 "Returning Series",
-                7.9f
-        )
-        )
+                7.9f))
         list.add(
             TvDetailResponse(
                 85271,
@@ -319,16 +323,54 @@ object DataDummy {
         return list
     }
 
-    fun getMovieList(): List<MovieDetailResponse> = movieList
-    fun getTvList(): List<TvDetailResponse> = tvList
-    fun getMovie(movieId: Long): MovieDetailResponse?{
-        for(item in movieList){
+    private fun generateDummyMovieList(): List<MovieEntity>{
+        val list = mutableListOf<MovieEntity>()
+        list.add(MovieEntity(
+            399566L,
+            "Godzilla vs. Kong",
+            8.3f,
+            "2021-03-24",
+            "/posterPath.jpg"
+        ))
+        list.add(MovieEntity(
+            791373L,
+            "Zack Snyder's Justice League",
+            8.5f,
+            "2021-03-18",
+            "/posterPath.jpg"
+        ))
+        return list
+    }
+
+    private fun generateDummyTvList(): List<TvEntity>{
+        val list = mutableListOf<TvEntity>()
+        list.add(TvEntity(
+            85271L,
+            "WandaVision",
+            8.4f,
+            "2021-01-15",
+            "/posterPath.jpg"
+        ))
+        list.add(TvEntity(
+            120168L,
+            "Who Killed Sara?",
+            7.9f,
+            "2021-03-24",
+            "/posterPath.jpg"
+        ))
+        return list
+    }
+
+    fun getMovieList(): List<MovieEntity> = movieList
+    fun getTvList(): List<TvEntity> = tvList
+    fun getDetailMovie(movieId: Long): MovieDetailResponse?{
+        for(item in movieDetailList){
             if(item.id == movieId) return item
         }
         return null
     }
-    fun getTv(tvId: Long): TvDetailResponse?{
-        for(item in tvList){
+    fun getDetailTv(tvId: Long): TvDetailResponse?{
+        for(item in tvDetailList){
             if(item.id == tvId) return item
         }
         return null

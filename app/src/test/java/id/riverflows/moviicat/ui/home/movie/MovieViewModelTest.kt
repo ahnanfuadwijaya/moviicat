@@ -2,11 +2,11 @@ package id.riverflows.moviicat.ui.home.movie
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.nhaarman.mockitokotlin2.verify
 import id.riverflows.moviicat.data.source.remote.Resource
-import id.riverflows.moviicat.data.source.remote.response.MovieDetailResponse
 import id.riverflows.moviicat.data.source.remote.response.MovieListResponse
 import id.riverflows.moviicat.data.source.repository.ListRepository
-import id.riverflows.moviicat.util.DataDummy
+import id.riverflows.moviicat.util.UtilDataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,25 +15,35 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import org.hamcrest.core.IsInstanceOf.instanceOf
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
+import org.mockito.junit.MockitoJUnitRunner
 
 
 @ExperimentalCoroutinesApi
+@RunWith(MockitoJUnitRunner::class)
 class MovieViewModelTest {
     private lateinit var viewModel: MovieViewModel
     @get:Rule
     val coroutineScope =  MainCoroutineScopeRule()
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+    @Mock
+    private lateinit var observer: Observer<Resource<MovieListResponse>>
+    @Mock
+    private lateinit var repository: ListRepository
     private val testDispatcher = TestCoroutineDispatcher()
-    private val repository = mock(ListRepository::class.java)
+    private val dummyPage = 1
+    private val dummyTotalPages = 1
+    private val dummyTotalResults = 2
+    private val dummyHttpErrorCode = 401
 
     @Before
     fun setup(){
@@ -41,18 +51,56 @@ class MovieViewModelTest {
         Dispatchers.setMain(testDispatcher)
     }
 
-    @Suppress("UNCHECKED_CAST")
     @Test
-    fun getMovieList() {
-        val list = DataDummy.getMovieList() as Resource<MovieListResponse>
-        val observer = mock(Observer::class.java) as Observer<Resource<MovieListResponse>>
+    fun getSuccessMovieList() {
+        val dummyList = UtilDataDummy.getMovieList()
+        val dummySuccessResponse = Resource.Success(MovieListResponse(dummyPage, dummyList, dummyTotalPages, dummyTotalResults))
         viewModel.movieList.observeForever(observer)
         runBlocking {
+            `when`(repository.getMovieList()).thenReturn(dummySuccessResponse)
             viewModel.getMovieList()
             delay(500)
-            verify(observer).onChanged(list)
-            assertNotNull(viewModel.movieList.value)
-            assertEquals(viewModel.movieList.value, list)
+            verify(observer).onChanged(dummySuccessResponse)
+            val response = viewModel.movieList.value as Resource.Success<MovieListResponse>
+            assertNotNull(response)
+            assertThat(response.value, instanceOf(MovieListResponse::class.java))
+            assertEquals(response.value.data, dummyList)
+            assertEquals(response.value.data.size, dummyList.size)
+            viewModel.movieList.removeObserver(observer)
+        }
+    }
+
+    @Test
+    fun getNetworkErrorMovieList(){
+        val dummyNetworkErrorResponse = Resource.Failure(null)
+        viewModel.movieList.observeForever(observer)
+        runBlocking {
+            `when`(repository.getMovieList()).thenReturn(dummyNetworkErrorResponse)
+            viewModel.getMovieList()
+            delay(500)
+            verify(observer).onChanged(dummyNetworkErrorResponse)
+            val response = viewModel.movieList.value as Resource.Failure
+            assertNotNull(response)
+            assertThat(response, instanceOf(Resource.Failure::class.java))
+            assertNull(response.code)
+            viewModel.movieList.removeObserver(observer)
+        }
+    }
+
+    @Test
+    fun getHttpErrorMovieList(){
+        val dummyHttpErrorResponse = Resource.Failure(dummyHttpErrorCode)
+        viewModel.movieList.observeForever(observer)
+        runBlocking {
+            `when`(repository.getMovieList()).thenReturn(dummyHttpErrorResponse)
+            viewModel.getMovieList()
+            delay(500)
+            verify(observer).onChanged(dummyHttpErrorResponse)
+            val response = viewModel.movieList.value as Resource.Failure
+            assertNotNull(response)
+            assertThat(response, instanceOf(Resource.Failure::class.java))
+            assertNotNull(response.code)
+            assertTrue(response.code in 100..599)
             viewModel.movieList.removeObserver(observer)
         }
     }

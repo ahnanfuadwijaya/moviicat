@@ -15,7 +15,7 @@ import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.adapter.TvListAdapter
 import id.riverflows.moviicat.ui.decoration.SpaceItemDecoration
 import id.riverflows.moviicat.ui.detail.tv.DetailTvActivity
-import id.riverflows.moviicat.util.EspressoIdlingResource
+import id.riverflows.moviicat.util.UtilIdlingResource
 import id.riverflows.moviicat.util.UtilConstants
 import id.riverflows.moviicat.util.UtilErrorMessage
 import id.riverflows.moviicat.util.UtilSnackBar
@@ -44,7 +44,7 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
     private fun requestData(){
         viewModel.getTvList()
         setLoadingState(true)
-        EspressoIdlingResource.increment()
+        UtilIdlingResource.increment()
     }
 
     private fun bindInterface(){
@@ -59,7 +59,7 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
     private fun observeViewModel(){
         viewModel.tvList.observe(viewLifecycleOwner){
             setLoadingState(false)
-            EspressoIdlingResource.decrement()
+            UtilIdlingResource.decrement()
             when(it){
                 is Resource.Success -> {
                     bindRecyclerView(it.value.data)

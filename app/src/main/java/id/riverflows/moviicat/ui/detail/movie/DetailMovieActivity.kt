@@ -1,7 +1,6 @@
 package id.riverflows.moviicat.ui.detail.movie
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -47,13 +46,13 @@ class DetailMovieActivity : AppCompatActivity() {
         val movieId = intent.getLongExtra(UtilConstants.EXTRA_MOVIE_ID, 0)
         viewModel.getMovie(movieId)
         setLoadingState(true)
-        EspressoIdlingResource.increment()
+        UtilIdlingResource.increment()
     }
 
     private fun observeViewModel(){
         viewModel.movie.observe(this){
             setLoadingState(false)
-            EspressoIdlingResource.decrement()
+            UtilIdlingResource.decrement()
             when(it){
                 is Resource.Success -> {
                     bindData(it.value)
