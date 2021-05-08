@@ -1,8 +1,6 @@
 package id.riverflows.moviicat.data.source.repository
 
-import id.riverflows.moviicat.BuildConfig
 import id.riverflows.moviicat.data.source.remote.api.DetailApiService
-import id.riverflows.moviicat.di.Injection
 
 class FakeDetailRepository(
     private val api: DetailApiService

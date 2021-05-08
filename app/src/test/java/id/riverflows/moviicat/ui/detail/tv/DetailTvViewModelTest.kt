@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.verify
 import id.riverflows.moviicat.data.source.remote.Resource
-import id.riverflows.moviicat.data.source.remote.response.MovieDetailResponse
 import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
 import id.riverflows.moviicat.data.source.repository.DetailRepository
 import id.riverflows.moviicat.util.UtilDataDummy
@@ -16,14 +15,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.hamcrest.core.IsInstanceOf
 import org.hamcrest.core.IsInstanceOf.instanceOf
 import org.junit.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
