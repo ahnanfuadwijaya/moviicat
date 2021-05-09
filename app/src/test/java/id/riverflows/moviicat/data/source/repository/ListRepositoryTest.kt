@@ -41,14 +41,16 @@ class ListRepositoryTest{
             doAnswer {
                 dummyResponse
             }.`when`(apiService).getMovieList()
-            val response = repository.getMovieList() as Resource.Success
+            val response = repository.getMovieList()
             verify(apiService).getMovieList()
             assertNotNull(response)
-            assertThat(response, IsInstanceOf.instanceOf(Resource.Success::class.java))
-            assertEquals(dummyPage, response.value.page)
-            assertEquals(dummyTotalPages, response.value.totalPages)
-            assertEquals(dummyTotalResults, response.value.totalResults)
-            assertEquals(dummyMovieList, response.value.data)
+            assertTrue(response is Resource.Success)
+            if(response is Resource.Success){
+                assertEquals(dummyPage, response.value.page)
+                assertEquals(dummyTotalPages, response.value.totalPages)
+                assertEquals(dummyTotalResults, response.value.totalResults)
+                assertEquals(dummyMovieList, response.value.data)
+            }
         }
     }
 

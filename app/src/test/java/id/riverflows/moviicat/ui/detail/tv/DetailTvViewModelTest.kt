@@ -23,6 +23,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -58,8 +59,9 @@ class DetailTvViewModelTest{
             viewModel.getTv(tvId)
             delay(500)
             verify(observer).onChanged(dummySuccessResponse)
-            val response = viewModel.tv.value as Resource.Success<TvDetailResponse>
+            val response = viewModel.tv.value
             assertNotNull(response)
+            assertTrue(response is Resource.Success)
             Assert.assertThat(
                 response.value,
                 instanceOf(TvDetailResponse::class.java)
@@ -78,9 +80,9 @@ class DetailTvViewModelTest{
             viewModel.getTv(tvId)
             delay(500)
             verify(observer).onChanged(dummyNetworkErrorResponse)
-            val response = viewModel.tv.value as Resource.Failure
+            val response = viewModel.tv.value
             assertNotNull(response)
-            Assert.assertThat(response, instanceOf(Resource.Failure::class.java))
+            assertTrue(response is Resource.Failure)
             Assert.assertNull(response.code)
             viewModel.tv.removeObserver(observer)
         }
@@ -95,9 +97,9 @@ class DetailTvViewModelTest{
             viewModel.getTv(tvId)
             delay(500)
             verify(observer).onChanged(dummyHttpErrorResponse)
-            val response = viewModel.tv.value as Resource.Failure
+            val response = viewModel.tv.value
             assertNotNull(response)
-            Assert.assertThat(response, instanceOf(Resource.Failure::class.java))
+            assertTrue(response is Resource.Failure)
             assertNotNull(response.code)
             Assert.assertTrue(response.code in 100..599)
             viewModel.tv.removeObserver(observer)

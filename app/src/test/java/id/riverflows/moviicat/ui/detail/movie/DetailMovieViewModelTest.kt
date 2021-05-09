@@ -60,10 +60,13 @@ class DetailMovieViewModelTest{
             viewModel.getMovie(movieId)
             delay(500)
             verify(observer).onChanged(dummySuccessResponse)
-            val response = viewModel.movie.value as Resource.Success<MovieDetailResponse>
+            val response = viewModel.movie.value
             assertNotNull(response)
-            assertThat(response.value, instanceOf(MovieDetailResponse::class.java))
-            assertEquals(response.value, movieDetail)
+            assertTrue(response is Resource.Success)
+            if(response is Resource.Success){
+                assertThat(response.value, instanceOf(MovieDetailResponse::class.java))
+                assertEquals(response.value, movieDetail)
+            }
             viewModel.movie.removeObserver(observer)
         }
     }
@@ -77,10 +80,10 @@ class DetailMovieViewModelTest{
             viewModel.getMovie(movieId)
             delay(500)
             verify(observer).onChanged(dummyNetworkErrorResponse)
-            val response = viewModel.movie.value as Resource.Failure
+            val response = viewModel.movie.value
             assertNotNull(response)
-            assertThat(response, instanceOf(Resource.Failure::class.java))
-            assertNull(response.code)
+            assertTrue(response is Resource.Failure)
+            if(response is Resource.Failure) assertNull(response.code)
             viewModel.movie.removeObserver(observer)
         }
     }
@@ -94,11 +97,13 @@ class DetailMovieViewModelTest{
             viewModel.getMovie(movieId)
             delay(500)
             verify(observer).onChanged(dummyHttpErrorResponse)
-            val response = viewModel.movie.value as Resource.Failure
+            val response = viewModel.movie.value
             assertNotNull(response)
-            assertThat(response, instanceOf(Resource.Failure::class.java))
-            assertNotNull(response.code)
-            assertTrue(response.code in 100..599)
+            assertTrue(response is Resource.Failure)
+            if(response is Resource.Failure){
+                assertNotNull(response.code)
+                assertTrue(response.code in 100..599)
+            }
             viewModel.movie.removeObserver(observer)
         }
     }

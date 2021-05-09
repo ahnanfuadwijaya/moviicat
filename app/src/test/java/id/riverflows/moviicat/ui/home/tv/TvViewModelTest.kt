@@ -60,14 +60,17 @@ class TvViewModelTest {
             viewModel.getTvList()
             delay(500)
             verify(observer).onChanged(dummySuccessResponse)
-            val response = viewModel.tvList.value as Resource.Success<TvListResponse>
+            val response = viewModel.tvList.value
             assertNotNull(response)
-            assertThat(
-                response.value,
-                instanceOf(TvListResponse::class.java)
-            )
-            assertEquals(response.value.data, dummyList)
-            assertEquals(response.value.data.size, dummyList.size)
+            assertTrue(response is Resource.Success)
+            if(response is Resource.Success){
+                assertThat(
+                    response.value,
+                    instanceOf(TvListResponse::class.java)
+                )
+                assertEquals(response.value.data, dummyList)
+                assertEquals(response.value.data.size, dummyList.size)
+            }
             viewModel.tvList.removeObserver(observer)
         }
     }
@@ -81,10 +84,10 @@ class TvViewModelTest {
             viewModel.getTvList()
             delay(500)
             verify(observer).onChanged(dummyNetworkErrorResponse)
-            val response = viewModel.tvList.value as Resource.Failure
+            val response = viewModel.tvList.value
             assertNotNull(response)
-            assertThat(response, instanceOf(Resource.Failure::class.java))
-            assertNull(response.code)
+            assertTrue(response is Resource.Failure)
+            if(response is Resource.Failure) assertNull(response.code)
             viewModel.tvList.removeObserver(observer)
         }
     }
@@ -98,11 +101,13 @@ class TvViewModelTest {
             viewModel.getTvList()
             delay(500)
             verify(observer).onChanged(dummyHttpErrorResponse)
-            val response = viewModel.tvList.value as Resource.Failure
+            val response = viewModel.tvList.value
             assertNotNull(response)
-            assertThat(response, instanceOf(Resource.Failure::class.java))
-            assertNotNull(response.code)
-            assertTrue(response.code in 100..599)
+            assertTrue(response is Resource.Failure)
+            if(response is Resource.Failure){
+                assertNotNull(response.code)
+                assertTrue(response.code in 100..599)
+            }
             viewModel.tvList.removeObserver(observer)
         }
     }
