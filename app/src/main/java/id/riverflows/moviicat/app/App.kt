@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package id.riverflows.moviicat.app
 
 import android.app.Application

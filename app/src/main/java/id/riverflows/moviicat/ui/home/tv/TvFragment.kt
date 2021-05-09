@@ -15,9 +15,9 @@ import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.adapter.TvListAdapter
 import id.riverflows.moviicat.ui.decoration.SpaceItemDecoration
 import id.riverflows.moviicat.ui.detail.tv.DetailTvActivity
-import id.riverflows.moviicat.util.UtilIdlingResource
 import id.riverflows.moviicat.util.UtilConstants
 import id.riverflows.moviicat.util.UtilErrorMessage
+import id.riverflows.moviicat.util.UtilIdlingResource
 import id.riverflows.moviicat.util.UtilSnackBar
 
 class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
@@ -44,7 +44,6 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
     private fun requestData(){
         viewModel.getTvList()
         setLoadingState(true)
-        UtilIdlingResource.increment()
     }
 
     private fun bindInterface(){
@@ -59,7 +58,6 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
     private fun observeViewModel(){
         viewModel.tvList.observe(viewLifecycleOwner){
             setLoadingState(false)
-            UtilIdlingResource.decrement()
             when(it){
                 is Resource.Success -> {
                     bindRecyclerView(it.value.data)
@@ -92,9 +90,11 @@ class TvFragment : Fragment(), TvListAdapter.OnItemClickCallback {
     private fun setLoadingState(isLoading: Boolean){
         with(binding.shimmerContainer){
             visibility = if(isLoading){
+                UtilIdlingResource.increment()
                 startShimmerAnimation()
                 View.VISIBLE
             }else{
+                UtilIdlingResource.decrement()
                 stopShimmerAnimation()
                 View.INVISIBLE
             }

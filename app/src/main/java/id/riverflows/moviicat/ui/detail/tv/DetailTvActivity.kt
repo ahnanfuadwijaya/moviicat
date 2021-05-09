@@ -11,8 +11,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.Chip
 import id.riverflows.moviicat.R
 import id.riverflows.moviicat.data.entity.GenreEntity
-import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
 import id.riverflows.moviicat.data.source.remote.Resource
+import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
 import id.riverflows.moviicat.databinding.ActivityDetailTvBinding
 import id.riverflows.moviicat.di.Injection
 import id.riverflows.moviicat.factory.ViewModelFactory
@@ -45,13 +45,11 @@ class DetailTvActivity : AppCompatActivity() {
         val tvId = intent.getLongExtra(UtilConstants.EXTRA_TV_ID, 0)
         viewModel.getTv(tvId)
         setLoadingState(true)
-        UtilIdlingResource.increment()
     }
 
     private fun observeViewModel(){
         viewModel.tv.observe(this){
             setLoadingState(false)
-            UtilIdlingResource.decrement()
             when(it){
                 is Resource.Success -> {
                     bindData(it.value)
@@ -109,10 +107,12 @@ class DetailTvActivity : AppCompatActivity() {
     private fun setLoadingState(isLoading: Boolean){
         with(binding){
             if(isLoading){
+                UtilIdlingResource.increment()
                 viewContainer.visibility = View.INVISIBLE
                 shimmerContainer.visibility = View.VISIBLE
                 shimmerContainer.startShimmerAnimation()
             }else{
+                UtilIdlingResource.decrement()
                 viewContainer.visibility = View.VISIBLE
                 shimmerContainer.visibility = View.INVISIBLE
                 shimmerContainer.stopShimmerAnimation()

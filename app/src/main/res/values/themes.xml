@@ -156,7 +156,4 @@
         <item name="android:gravity">center</item>
         <item name="android:padding">@dimen/space_small</item>
     </style>
-    <style name="GenreChip.Shimmer">
-        <item name="android:background">@color/dark_grey_200</item>
-    </style>
 </resources>

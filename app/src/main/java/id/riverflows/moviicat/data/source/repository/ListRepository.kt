@@ -1,9 +1,6 @@
 package id.riverflows.moviicat.data.source.repository
 
-import android.content.SharedPreferences
-import id.riverflows.moviicat.BuildConfig
 import id.riverflows.moviicat.data.source.remote.api.ListApiService
-import id.riverflows.moviicat.di.Injection
 
 class ListRepository(
     private val api: ListApiService

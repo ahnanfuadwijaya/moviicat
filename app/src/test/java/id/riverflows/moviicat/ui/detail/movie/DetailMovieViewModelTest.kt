@@ -5,9 +5,7 @@ import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.verify
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.response.MovieDetailResponse
-import id.riverflows.moviicat.data.source.remote.response.MovieListResponse
 import id.riverflows.moviicat.data.source.repository.DetailRepository
-import id.riverflows.moviicat.data.source.repository.ListRepository
 import id.riverflows.moviicat.util.UtilDataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import kotlinx.coroutines.Dispatchers
