@@ -8,7 +8,14 @@ class ListRepository(
     suspend fun getMovieList() = safeApiCall {
         api.getMovieList()
     }
+    suspend fun getPagedMovieList(page: Long) = safeApiCall {
+        api.getPagedMovieList(page)
+    }
+
     suspend fun getTvList() = safeApiCall {
         api.getTvList()
+    }
+    suspend fun getPagedTvList(page: Long) = safeApiCall {
+        api.getPagedTvList(page)
     }
 }

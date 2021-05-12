@@ -16,4 +16,8 @@
     <string name="error_message_4xx">Bad Request</string>
     <string name="error_message_5xx">Server Error</string>
     <string name="error_message_network">Network Error</string>
+    <string name="title_home">Home</string>
+    <string name="title_search">Search</string>
+    <string name="title_favorite">Favorite</string>
+    <string name="action_tap_to_retry">Tap to Retry</string>
 </resources>
