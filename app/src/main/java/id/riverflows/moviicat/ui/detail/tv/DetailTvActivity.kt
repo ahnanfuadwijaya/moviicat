@@ -11,17 +11,21 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.Chip
 import id.riverflows.moviicat.R
 import id.riverflows.moviicat.data.entity.GenreEntity
+import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
 import id.riverflows.moviicat.databinding.ActivityDetailTvBinding
 import id.riverflows.moviicat.di.Injection
 import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.util.*
+import timber.log.Timber
+import java.util.*
 
 class DetailTvActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailTvBinding
     private lateinit var viewModel: DetailTvViewModel
     private var tvName = ""
+    private var favoriteData: FavoriteEntity? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupView()
@@ -34,6 +38,9 @@ class DetailTvActivity : AppCompatActivity() {
         binding = ActivityDetailTvBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title = getString(R.string.title_detail_tv_show)
+        binding.fabFavorite.setOnClickListener {
+            favoriteData?.let { viewModel.insertFavorite(it) }
+        }
     }
 
     private fun obtainViewModel(){
@@ -60,10 +67,19 @@ class DetailTvActivity : AppCompatActivity() {
                 }
             }
         }
+        viewModel.insertResult.observe(this){
+            if(it>0){
+                Timber.d("Insert Success")
+            }else{
+                Timber.d("Insert Failed")
+            }
+        }
     }
 
     private fun bindData(data: TvDetailResponse){
         tvName = data.name
+        val date = Date().time
+        favoriteData = FavoriteEntity(data.id, data.name, data.voteAverage, data.firstAirDate, data.posterPath?:"", date, UtilConstants.TYPE_TV)
         with(binding){
             val posterPath = "${Injection.provideOriginalPosterPath()}${data.posterPath}"
             Glide.with(this@DetailTvActivity)
@@ -80,6 +96,7 @@ class DetailTvActivity : AppCompatActivity() {
             inflateChips(data.genres)
             tvValueOverview.text = data.overview
         }
+        Timber.d(favoriteData.toString())
     }
 
     private fun inflateChips(list: List<GenreEntity>){

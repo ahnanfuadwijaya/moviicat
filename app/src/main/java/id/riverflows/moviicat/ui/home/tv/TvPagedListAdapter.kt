@@ -64,6 +64,8 @@ class TvPagedListAdapter: PagingDataAdapter<TvEntity, TvPagedListAdapter.TvViewH
                 tvScore.text = data.voteAverage.toString()
                 if(data.voteAverage < 7.5){
                     binding.ivScore.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_score_red))
+                }else{
+                    binding.ivScore.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_score))
                 }
             }
             itemView.setOnClickListener { onItemClickCallback.onItemClicked(data) }

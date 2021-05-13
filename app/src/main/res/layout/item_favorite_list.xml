@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/space_small">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_normal">
+
+        <ImageView
+            android:id="@+id/iv_poster"
+            style="@style/RVItemPoster"
+            android:contentDescription="@string/desc_poster"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/RVItemTitle.List"
+            android:layout_marginStart="@dimen/space_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_poster"
+            app:layout_constraintTop_toTopOf="@+id/iv_poster"
+            tools:text="This is Title" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            style="@style/RVItemField.List"
+            android:layout_marginTop="@dimen/space_small"
+            app:layout_constraintStart_toStartOf="@+id/tv_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            tools:text="2021-01-15" />
+
+        <TextView
+            android:id="@+id/tv_type"
+            style="@style/RVItemField.List"
+            android:gravity="center_vertical"
+            app:drawableStartCompat="@drawable/ic_type"
+            android:drawablePadding="@dimen/padding_small"
+            android:layout_marginTop="@dimen/space_small"
+            app:layout_constraintStart_toStartOf="@+id/tv_date"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date"
+            tools:text="TV Series" />
+
+        <ImageView
+            android:id="@+id/iv_score"
+            style="@style/RVItemIvScore"
+            android:layout_marginStart="@dimen/space_small"
+            android:layout_marginBottom="@dimen/space_small"
+            android:src="@drawable/ic_score"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_poster"
+            app:layout_constraintStart_toEndOf="@+id/iv_poster"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_score"
+            style="@style/RVItemScore"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_score"
+            app:layout_constraintEnd_toEndOf="@+id/iv_score"
+            app:layout_constraintStart_toStartOf="@+id/iv_score"
+            app:layout_constraintTop_toTopOf="@+id/iv_score"
+            tools:text="8.5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -67,9 +67,9 @@ class GridFragment(private val type: String) : Fragment(){
             layoutManager = GridLayoutManager(context, UtilConstants.GRID_COUNT)
             addItemDecoration(SpaceItemDecoration(UtilConstants.SPACE_ITEM_DECORATION))
             adapter = if(type == TYPE_MOVIE) {
-                movieAdapter.withLoadStateHeaderAndFooter(loadingStateAdapter, loadingStateAdapter)
+                movieAdapter
             } else {
-                tvAdapter.withLoadStateHeaderAndFooter(loadingStateAdapter, loadingStateAdapter)
+                tvAdapter
             }
         }
     }

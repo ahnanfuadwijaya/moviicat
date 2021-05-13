@@ -7,6 +7,7 @@ import id.riverflows.moviicat.data.source.repository.ListRepository
 import id.riverflows.moviicat.di.Injection
 import id.riverflows.moviicat.ui.detail.movie.DetailMovieViewModel
 import id.riverflows.moviicat.ui.detail.tv.DetailTvViewModel
+import id.riverflows.moviicat.ui.home.favorite.FavoriteViewModel
 import id.riverflows.moviicat.ui.home.movie.MovieViewModel
 import id.riverflows.moviicat.ui.home.tv.TvViewModel
 
@@ -19,6 +20,7 @@ class ViewModelFactory: ViewModelProvider.NewInstanceFactory() {
             modelClass.isAssignableFrom(TvViewModel::class.java) -> TvViewModel(repository as ListRepository) as T
             modelClass.isAssignableFrom(DetailMovieViewModel::class.java) -> DetailMovieViewModel(repository as DetailRepository) as T
             modelClass.isAssignableFrom(DetailTvViewModel::class.java) -> DetailTvViewModel(repository as DetailRepository) as T
+            modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> FavoriteViewModel(repository as ListRepository) as T
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
         }
     }

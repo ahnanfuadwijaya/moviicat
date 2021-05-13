@@ -15,4 +15,6 @@ object UtilConstants {
     const val PREFETCH_DISTANCE = 4
     const val INITIAL_LOAD_SIZE = 10
     const val INITIAL_KEY = 1L
+    const val TYPE_MOVIE = "type_movie"
+    const val TYPE_TV = "type_tv"
 }

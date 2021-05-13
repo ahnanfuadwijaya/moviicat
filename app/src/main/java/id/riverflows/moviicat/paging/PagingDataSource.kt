@@ -4,10 +4,9 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.data.entity.TvEntity
+import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.data.source.remote.Resource
-import id.riverflows.moviicat.data.source.remote.response.MovieListResponse
 import id.riverflows.moviicat.data.source.repository.ListRepository
-import id.riverflows.moviicat.util.UtilErrorMessage
 
 class PagingDataSource{
     class MovieList(private val repository: ListRepository): PagingSource<Long, MovieEntity>() {
@@ -40,7 +39,9 @@ class PagingDataSource{
     }
     class TvList(private val repository: ListRepository): PagingSource<Long, TvEntity>(){
         override fun getRefreshKey(state: PagingState<Long, TvEntity>): Long? {
-            return state.anchorPosition?.toLong()
+            return state.anchorPosition?.let { anchorPosition ->
+                state.closestItemToPosition(anchorPosition)?.id
+            }
         }
 
         override suspend fun load(params: LoadParams<Long>): LoadResult<Long, TvEntity> {
