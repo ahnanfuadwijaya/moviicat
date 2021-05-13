@@ -20,4 +20,6 @@
     <string name="title_search">Search</string>
     <string name="title_favorite">Favorite</string>
     <string name="action_tap_to_retry">Tap to Retry</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

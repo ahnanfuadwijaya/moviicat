@@ -16,16 +16,6 @@ import id.riverflows.moviicat.di.Injection
 class MoviePagedListAdapter: PagingDataAdapter<MovieEntity, MoviePagedListAdapter.MovieViewHolder>(
     MovieComparator
 ) {
-
-    companion object MovieComparator : DiffUtil.ItemCallback<MovieEntity>() {
-        override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
-            return oldItem == newItem
-        }
-    }
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     fun setItemClickCallback(onItemClickCallback: OnItemClickCallback){
@@ -71,7 +61,18 @@ class MoviePagedListAdapter: PagingDataAdapter<MovieEntity, MoviePagedListAdapte
             itemView.setOnClickListener { onItemClickCallback.onItemClicked(data) }
         }
     }
+
     interface OnItemClickCallback{
         fun onItemClicked(data: MovieEntity)
+    }
+
+    companion object MovieComparator : DiffUtil.ItemCallback<MovieEntity>() {
+        override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+            return oldItem == newItem
+        }
     }
 }

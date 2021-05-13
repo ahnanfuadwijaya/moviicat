@@ -16,16 +16,6 @@ import id.riverflows.moviicat.di.Injection
 class TvPagedListAdapter: PagingDataAdapter<TvEntity, TvPagedListAdapter.TvViewHolder>(
     TvComparator
 ) {
-
-    companion object TvComparator : DiffUtil.ItemCallback<TvEntity>() {
-        override fun areItemsTheSame(oldItem: TvEntity, newItem: TvEntity): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: TvEntity, newItem: TvEntity): Boolean {
-            return oldItem == newItem
-        }
-    }
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     fun setItemClickCallback(onItemClickCallback: OnItemClickCallback){
@@ -73,5 +63,14 @@ class TvPagedListAdapter: PagingDataAdapter<TvEntity, TvPagedListAdapter.TvViewH
     }
     interface OnItemClickCallback{
         fun onItemClicked(data: TvEntity)
+    }
+    companion object TvComparator : DiffUtil.ItemCallback<TvEntity>() {
+        override fun areItemsTheSame(oldItem: TvEntity, newItem: TvEntity): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: TvEntity, newItem: TvEntity): Boolean {
+            return oldItem == newItem
+        }
     }
 }
