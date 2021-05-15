@@ -21,13 +21,13 @@ class TvViewModel(private val repository: ListRepository): ViewModel() {
     fun getTvList() = viewModelScope.launch(Dispatchers.IO){
         _tvList.postValue(repository.getTvList())
     }
-    val tvPagedList = Pager(
+    val tvPaged = Pager(
         PagingConfig(
             UtilConstants.DATA_PER_PAGE,
             UtilConstants.PREFETCH_DISTANCE,
             true,
             UtilConstants.INITIAL_LOAD_SIZE
         ), UtilConstants.INITIAL_KEY){
-        PagingDataSource.TvList(repository)
+        PagingDataSource.TvPaged(repository)
     }.flow.cachedIn(viewModelScope)
 }

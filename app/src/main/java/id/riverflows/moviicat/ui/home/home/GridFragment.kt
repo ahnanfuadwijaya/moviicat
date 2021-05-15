@@ -9,39 +9,37 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.data.entity.TvEntity
-import id.riverflows.moviicat.databinding.FragmentGridBinding
+import id.riverflows.moviicat.databinding.FragmentGridOrListBinding
 import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.decoration.SpaceItemDecoration
 import id.riverflows.moviicat.ui.detail.movie.DetailMovieActivity
 import id.riverflows.moviicat.ui.detail.tv.DetailTvActivity
-import id.riverflows.moviicat.ui.home.movie.MoviePagedListAdapter
+import id.riverflows.moviicat.ui.home.movie.MoviePagedAdapter
 import id.riverflows.moviicat.ui.home.movie.MovieViewModel
-import id.riverflows.moviicat.ui.home.tv.TvPagedListAdapter
+import id.riverflows.moviicat.ui.home.tv.TvPagedAdapter
 import id.riverflows.moviicat.ui.home.tv.TvViewModel
 import id.riverflows.moviicat.util.UtilConstants
-import id.riverflows.moviicat.util.UtilIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class GridFragment(private val type: String) : Fragment(){
-    private var _binding: FragmentGridBinding? = null
+    private var _binding: FragmentGridOrListBinding? = null
     private val binding
-        get() = _binding as FragmentGridBinding
+        get() = _binding as FragmentGridOrListBinding
     private lateinit var viewModel: ViewModel
-    private val movieAdapter = MoviePagedListAdapter()
-    private val tvAdapter = TvPagedListAdapter()
+    private val movieAdapter = MoviePagedAdapter()
+    private val tvAdapter = TvPagedAdapter()
     private val loadingStateAdapter = HomeLoadStateAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentGridBinding.inflate(inflater, container, false)
+        _binding = FragmentGridOrListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -63,7 +61,7 @@ class GridFragment(private val type: String) : Fragment(){
     }
 
     private fun setupView(){
-        with(binding.rvGrid){
+        with(binding.rvGridOrList){
             layoutManager = GridLayoutManager(context, UtilConstants.GRID_COUNT)
             addItemDecoration(SpaceItemDecoration(UtilConstants.SPACE_ITEM_DECORATION))
             adapter = if(type == TYPE_MOVIE) {
@@ -82,7 +80,7 @@ class GridFragment(private val type: String) : Fragment(){
         }
     }
 
-    private val movieCallback = object : MoviePagedListAdapter.OnItemClickCallback {
+    private val movieCallback = object : MoviePagedAdapter.OnItemClickCallback {
         override fun onItemClicked(data: MovieEntity) {
             startActivity(
                 Intent(context, DetailMovieActivity::class.java)
@@ -91,7 +89,7 @@ class GridFragment(private val type: String) : Fragment(){
         }
     }
 
-    private val tvCallback = object : TvPagedListAdapter.OnItemClickCallback {
+    private val tvCallback = object : TvPagedAdapter.OnItemClickCallback {
         override fun onItemClicked(data: TvEntity) {
             startActivity(
                 Intent(context, DetailTvActivity::class.java)
@@ -103,11 +101,11 @@ class GridFragment(private val type: String) : Fragment(){
     private fun observeViewModel(){
         lifecycleScope.launch(Dispatchers.Main){
             if(type == TYPE_MOVIE){
-                (viewModel as MovieViewModel).moviePagedList.collectLatest { pagingData ->
+                (viewModel as MovieViewModel).moviePaged.collectLatest { pagingData ->
                     movieAdapter.submitData(pagingData)
                 }
             }else{
-                (viewModel as TvViewModel).tvPagedList.collectLatest { pagingData ->
+                (viewModel as TvViewModel).tvPaged.collectLatest { pagingData ->
                     tvAdapter.submitData(pagingData)
                 }
             }

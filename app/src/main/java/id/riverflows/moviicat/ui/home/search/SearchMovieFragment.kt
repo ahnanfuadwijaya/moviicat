@@ -1,4 +1,4 @@
-package id.riverflows.moviicat.ui.home.favorite
+package id.riverflows.moviicat.ui.home.search
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,22 +9,23 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
+import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.databinding.FragmentGridOrListBinding
 import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.detail.movie.DetailMovieActivity
-import id.riverflows.moviicat.ui.detail.tv.DetailTvActivity
 import id.riverflows.moviicat.util.UtilConstants
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class FavoriteFragment : Fragment(), FavoritePagedListAdapter.OnItemClickCallback {
+
+class SearchMovieFragment : Fragment(), SearchMoviePagedAdapter.OnItemClickCallback {
     private var _binding: FragmentGridOrListBinding? = null
     private val binding
         get() = _binding as FragmentGridOrListBinding
-    private lateinit var viewModel: FavoriteViewModel
-    private val rvAdapter = FavoritePagedListAdapter()
+    private val movieAdapter = SearchMoviePagedAdapter()
+    private lateinit var viewModel: SearchViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,32 +36,29 @@ class FavoriteFragment : Fragment(), FavoritePagedListAdapter.OnItemClickCallbac
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
+        setupView()
         obtainViewModel()
-        observeViewModel()
-        Timber.d("onViewCreated")
     }
 
-    private fun setupRecyclerView(){
-        rvAdapter.setItemClickCallback(this)
+    private fun setupView(){
+        movieAdapter.setItemClickCallback(this)
         with(binding.rvGridOrList){
             layoutManager = LinearLayoutManager(context)
-            adapter = rvAdapter
+            adapter = movieAdapter
         }
     }
 
     private fun obtainViewModel(){
         val factory = ViewModelFactory.getInstance()
-        viewModel = ViewModelProvider(viewModelStore, factory)[FavoriteViewModel::class.java]
+        viewModel = ViewModelProvider(viewModelStore, factory)[SearchViewModel::class.java]
     }
-
-    private fun observeViewModel(){
-        viewModel.getFavoritePagedList().observe(viewLifecycleOwner){
-            lifecycleScope.launch(Dispatchers.IO){
-                rvAdapter.submitData(it)
+    fun searchMovie(query: String){
+        lifecycleScope.launch(Dispatchers.Main){
+            viewModel.getMovieSearchResultPaged(query).collectLatest {
+                movieAdapter.submitData(it)
             }
-            Timber.d(it.toString())
         }
+        Timber.d(query)
     }
 
     override fun onDestroy() {
@@ -68,14 +66,9 @@ class FavoriteFragment : Fragment(), FavoritePagedListAdapter.OnItemClickCallbac
         _binding = null
     }
 
-    override fun onItemClicked(data: FavoriteEntity) {
-        when(data.type){
-            UtilConstants.TYPE_MOVIE -> startActivity(Intent(context, DetailMovieActivity::class.java).apply {
-                putExtra(UtilConstants.EXTRA_MOVIE_ID, data.id)
-            })
-            else -> startActivity(Intent(context, DetailTvActivity::class.java).apply {
-                putExtra(UtilConstants.EXTRA_TV_ID, data.id)
-            })
-        }
+    override fun onItemClicked(data: MovieEntity) {
+        startActivity(Intent(context, DetailMovieActivity::class.java).apply {
+            putExtra(UtilConstants.EXTRA_MOVIE_ID, data.id)
+        })
     }
 }

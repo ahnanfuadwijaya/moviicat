@@ -32,7 +32,7 @@ class HomeFragment : Fragment() {
         with(binding){
             binding.viewPager.adapter = pagerAdapter
             TabLayoutMediator(tabs, viewPager) { tab, position ->
-                val titles = resources.getStringArray(R.array.home_tab_titles)
+                val titles = resources.getStringArray(R.array.movie_tv_tab_titles)
                 tab.text = titles[position]
             }.attach()
         }

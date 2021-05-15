@@ -10,13 +10,22 @@ import id.riverflows.moviicat.paging.PagingDataSource
 import id.riverflows.moviicat.util.UtilConstants
 
 class SearchViewModel(private val repository: ListRepository): ViewModel() {
-    val searchPagedResult = Pager(
+    fun getMovieSearchResultPaged(query: String) = Pager(
         PagingConfig(
             UtilConstants.DATA_PER_PAGE,
             UtilConstants.PREFETCH_DISTANCE,
             true,
             UtilConstants.INITIAL_LOAD_SIZE
         ), UtilConstants.INITIAL_KEY){
-        PagingDataSource.MovieList(repository)
+        PagingDataSource.MovieSearchResultPaged(query, repository)
+    }.flow.cachedIn(viewModelScope)
+    fun getTvSearchResultPaged(query: String) = Pager(
+        PagingConfig(
+            UtilConstants.DATA_PER_PAGE,
+            UtilConstants.PREFETCH_DISTANCE,
+            true,
+            UtilConstants.INITIAL_LOAD_SIZE
+        ), UtilConstants.INITIAL_KEY){
+        PagingDataSource.TvSearchResultPaged(query, repository)
     }.flow.cachedIn(viewModelScope)
 }

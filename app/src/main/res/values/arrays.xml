@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="home_tab_titles">
+    <string-array name="movie_tv_tab_titles">
         <item>Movie</item>
         <item>TV Show</item>
     </string-array>

@@ -34,6 +34,11 @@ class HomeActivity : AppCompatActivity() {
                         navController.navigate(R.id.nav_home)
                         true
                     }
+                    R.id.menu_search -> {
+                        item.isChecked = true
+                        navController.navigate(R.id.nav_search)
+                        true
+                    }
                     R.id.menu_favorite -> {
                         item.isChecked = true
                         navController.navigate(R.id.nav_favorite)

@@ -11,14 +11,24 @@ interface ListApiService {
     @GET("/3/discover/movie")
     suspend fun getMovieList(): MovieListResponse
     @GET("/3/discover/movie")
-    suspend fun getPagedMovieList(
+    suspend fun getMoviePaged(
         @Query("page")page: Long
     ): MovieListResponse
 
     @GET("/3/discover/tv")
     suspend fun getTvList(): TvListResponse
     @GET("/3/discover/tv")
-    suspend fun getPagedTvList(
+    suspend fun getTvPaged(
             @Query("page")page: Long
+    ): TvListResponse
+    @GET("/3/search/movie")
+    suspend fun getMovieSearchResultPaged(
+        @Query("query")query: String,
+        @Query("page")page: Long
+    ): MovieListResponse
+    @GET("/3/search/tv")
+    suspend fun getTvSearchResultPaged(
+        @Query("query")query: String,
+        @Query("page")page: Long
     ): TvListResponse
 }

@@ -15,14 +15,14 @@ import kotlinx.coroutines.launch
 class MovieViewModel(private val repository: ListRepository): ViewModel() {
     private val _movieList = MutableLiveData<Resource<MovieListResponse>>()
     val movieList: LiveData<Resource<MovieListResponse>> = _movieList
-    val moviePagedList = Pager(
+    val moviePaged = Pager(
             PagingConfig(
                     DATA_PER_PAGE,
                     PREFETCH_DISTANCE,
                     true,
                     INITIAL_LOAD_SIZE
             ), UtilConstants.INITIAL_KEY){
-        PagingDataSource.MovieList(repository)
+        PagingDataSource.MoviePaged(repository)
     }.flow.cachedIn(viewModelScope)
 
     fun getMovieList() = viewModelScope.launch {

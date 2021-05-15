@@ -1,4 +1,4 @@
-package id.riverflows.moviicat.ui.home.favorite
+package id.riverflows.moviicat.ui.home.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,49 +10,37 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import id.riverflows.moviicat.R
 import id.riverflows.moviicat.data.entity.MovieEntity
-import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
-import id.riverflows.moviicat.databinding.ItemFavoriteListBinding
 import id.riverflows.moviicat.databinding.ItemHomeGridBinding
+import id.riverflows.moviicat.databinding.ItemSearchListBinding
 import id.riverflows.moviicat.di.Injection
-import id.riverflows.moviicat.util.UtilConstants
 
-class FavoritePagedListAdapter: PagingDataAdapter<FavoriteEntity, FavoritePagedListAdapter.FavoriteViewHolder>(
-    FavoriteComparator
+class SearchMoviePagedAdapter: PagingDataAdapter<MovieEntity, SearchMoviePagedAdapter.MovieViewHolder>(
+    MovieComparator
 ) {
-
-    companion object FavoriteComparator : DiffUtil.ItemCallback<FavoriteEntity>() {
-        override fun areItemsTheSame(oldItem: FavoriteEntity, newItem: FavoriteEntity): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: FavoriteEntity, newItem: FavoriteEntity): Boolean {
-            return oldItem == newItem
-        }
-    }
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     fun setItemClickCallback(onItemClickCallback: OnItemClickCallback){
         this.onItemClickCallback = onItemClickCallback
     }
 
-    override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val item = getItem(position)
         item?.let { holder.bindView(it) }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
-        return FavoriteViewHolder(
-                ItemFavoriteListBinding.bind(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+        return MovieViewHolder(
+                ItemSearchListBinding.bind(
                         LayoutInflater.from(parent.context).inflate(
-                                R.layout.item_favorite_list,
+                                R.layout.item_search_list,
                                 parent,
                                 false
                         )
                 )
         )
     }
-    inner class FavoriteViewHolder(private val binding: ItemFavoriteListBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bindView(data: FavoriteEntity){
+    inner class MovieViewHolder(private val binding: ItemSearchListBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bindView(data: MovieEntity){
             val context = itemView.context
             val posterPath = "${Injection.providePosterPath()}${data.posterPath}"
             with(binding){
@@ -63,8 +51,7 @@ class FavoritePagedListAdapter: PagingDataAdapter<FavoriteEntity, FavoritePagedL
                         .error(R.drawable.ic_broken_image)
                         .into(ivPoster)
                 tvTitle.text = data.title
-                tvDate.text = data.date
-                tvType.text = if(data.type == UtilConstants.TYPE_MOVIE) context.getString(R.string.type_movie) else context.getString(R.string.type_tv_show)
+                tvDate.text = data.releaseDate
                 tvScore.text = data.voteAverage.toString()
                 if(data.voteAverage < 7.5){
                     binding.ivScore.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_score_red))
@@ -75,7 +62,18 @@ class FavoritePagedListAdapter: PagingDataAdapter<FavoriteEntity, FavoritePagedL
             itemView.setOnClickListener { onItemClickCallback.onItemClicked(data) }
         }
     }
+
     interface OnItemClickCallback{
-        fun onItemClicked(data: FavoriteEntity)
+        fun onItemClicked(data: MovieEntity)
+    }
+
+    companion object MovieComparator : DiffUtil.ItemCallback<MovieEntity>() {
+        override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
+            return oldItem == newItem
+        }
     }
 }
