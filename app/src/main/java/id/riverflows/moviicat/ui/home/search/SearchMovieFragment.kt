@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,7 +26,7 @@ class SearchMovieFragment : Fragment(), SearchMoviePagedAdapter.OnItemClickCallb
     private val binding
         get() = _binding as FragmentGridOrListBinding
     private val movieAdapter = SearchMoviePagedAdapter()
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel by viewModels<SearchViewModel> { ViewModelFactory.getInstance() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,7 +38,6 @@ class SearchMovieFragment : Fragment(), SearchMoviePagedAdapter.OnItemClickCallb
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupView()
-        obtainViewModel()
     }
 
     private fun setupView(){
@@ -48,10 +48,6 @@ class SearchMovieFragment : Fragment(), SearchMoviePagedAdapter.OnItemClickCallb
         }
     }
 
-    private fun obtainViewModel(){
-        val factory = ViewModelFactory.getInstance()
-        viewModel = ViewModelProvider(viewModelStore, factory)[SearchViewModel::class.java]
-    }
     fun searchMovie(query: String){
         lifecycleScope.launch(Dispatchers.Main){
             viewModel.getMovieSearchResultPaged(query).collectLatest {

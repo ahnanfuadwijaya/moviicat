@@ -5,23 +5,29 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.Chip
 import id.riverflows.moviicat.R
 import id.riverflows.moviicat.data.entity.GenreEntity
+import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.response.MovieDetailResponse
-import id.riverflows.moviicat.databinding.ActivityDetailMovieBinding
+import id.riverflows.moviicat.databinding.ActivityDetailBinding
 import id.riverflows.moviicat.di.Injection
 import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.util.*
+import timber.log.Timber
+import java.util.*
 
 class DetailMovieActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityDetailMovieBinding
+    private lateinit var binding: ActivityDetailBinding
     private lateinit var viewModel: DetailMovieViewModel
     private var movieTitle = ""
+    private var favoriteData: FavoriteEntity? = null
+    private var isFavorite = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupView()
@@ -31,9 +37,13 @@ class DetailMovieActivity : AppCompatActivity() {
     }
     
     private fun setupView(){
-        binding = ActivityDetailMovieBinding.inflate(layoutInflater)
+        binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title = getString(R.string.title_detail_movie)
+        binding.fabFavorite.setOnClickListener {
+            favoriteData?.let {
+                if(isFavorite) viewModel.removeFavorite(it) else viewModel.insertFavorite(it)}
+        }
     }
 
     private fun obtainViewModel(){
@@ -45,6 +55,11 @@ class DetailMovieActivity : AppCompatActivity() {
         val movieId = intent.getLongExtra(UtilConstants.EXTRA_MOVIE_ID, 0)
         viewModel.getMovie(movieId)
         setLoadingState(true)
+        getFavoriteState(movieId)
+    }
+
+    private fun getFavoriteState(id: Long){
+        viewModel.findFavoriteByIdAndType(id, UtilConstants.TYPE_MOVIE)
     }
 
     private fun observeViewModel(){
@@ -60,10 +75,35 @@ class DetailMovieActivity : AppCompatActivity() {
                 }
             }
         }
+        viewModel.insertResult.observe(this){
+            isFavorite = if(it>0){
+                Timber.d("Insert Success")
+                true
+            }else{
+                Timber.d("Insert Failed")
+                false
+            }
+            setFabState(isFavorite)
+        }
+        viewModel.removeResult.observe(this){
+            if(it>0){
+                isFavorite = false
+                setFabState(isFavorite)
+                Timber.d("Remove Success")
+            }else{
+                Timber.d("Remove Failed")
+            }
+        }
+        viewModel.isFavorite.observe(this){
+            isFavorite = it != null
+            setFabState(isFavorite)
+        }
     }
 
     private fun bindData(data: MovieDetailResponse){
         movieTitle = data.title
+        val date = Date().time
+        favoriteData = FavoriteEntity(data.id, data.title, data.voteAverage, data.releaseDate, data.posterPath?:"", date, UtilConstants.TYPE_MOVIE)
         with(binding){
             val posterPath = "${Injection.provideOriginalPosterPath()}${data.posterPath}"
             Glide.with(this@DetailMovieActivity)
@@ -75,8 +115,8 @@ class DetailMovieActivity : AppCompatActivity() {
             tvTitle.text = data.title
             tvPopularity.text = getString(R.string.field_popularity, data.popularity)
             tvRate.text = data.voteAverage.toString()
-            tvReleaseDate.text = data.releaseDate
-            tvReleaseStatus.text = data.status
+            tvDate.text = data.releaseDate
+            tvStatus.text = data.status
             inflateChips(data.genres)
             tvValueOverview.text = data.overview
         }
@@ -116,6 +156,15 @@ class DetailMovieActivity : AppCompatActivity() {
                 viewContainer.visibility = View.VISIBLE
                 shimmerContainer.visibility = View.INVISIBLE
                 shimmerContainer.stopShimmerAnimation()
+            }
+        }
+    }
+    private fun setFabState(isFavorite: Boolean){
+        with(binding.fabFavorite){
+            if(isFavorite){
+                setImageResource(R.drawable.ic_favorite)
+            }else{
+                setImageResource(R.drawable.ic_favorite_border)
             }
         }
     }

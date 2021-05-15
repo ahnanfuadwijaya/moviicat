@@ -16,5 +16,7 @@ class DetailRepository(
         api.getDetailTv(tvId)
     }
 
-    fun insertFavorite(data: FavoriteEntity) = favoriteDao.insert(data)
+    suspend fun insertFavorite(data: FavoriteEntity) = favoriteDao.insert(data)
+    suspend fun removeFavorite(data: FavoriteEntity) = favoriteDao.remove(data)
+    suspend fun findFavoriteByIdAndType(id: Long, type: String) = favoriteDao.findByIdAndType(id, type)
 }

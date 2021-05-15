@@ -49,7 +49,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_name"
+                    android:id="@+id/tv_title"
                     style="@style/DetailTitle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -81,11 +81,11 @@
                     android:gravity="center_vertical"
                     app:drawableEndCompat="@drawable/ic_rate"
                     app:layout_constraintStart_toEndOf="@+id/rating_separator"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_name"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title"
                     tools:text="8.5" />
 
                 <TextView
-                    android:id="@+id/tv_airing_date"
+                    android:id="@+id/tv_date"
                     style="@style/DetailField"
                     android:layout_marginTop="@dimen/space_normal"
                     app:layout_constraintStart_toStartOf="parent"
@@ -97,16 +97,16 @@
                     style="@style/DetailSeparator"
                     android:layout_marginStart="@dimen/space_small"
                     android:text="@string/text_separator"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_airing_date"
-                    app:layout_constraintStart_toEndOf="@+id/tv_airing_date"
-                    app:layout_constraintTop_toTopOf="@+id/tv_airing_date" />
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_date"
+                    app:layout_constraintStart_toEndOf="@+id/tv_date"
+                    app:layout_constraintTop_toTopOf="@+id/tv_date" />
 
                 <TextView
-                    android:id="@+id/tv_airing_status"
+                    android:id="@+id/tv_status"
                     style="@style/DetailField"
                     android:layout_marginStart="@dimen/space_normal"
                     app:layout_constraintStart_toEndOf="@+id/date_separator"
-                    app:layout_constraintTop_toTopOf="@+id/tv_airing_date"
+                    app:layout_constraintTop_toTopOf="@+id/tv_date"
                     tools:text="Released" />
 
                 <HorizontalScrollView
@@ -115,7 +115,7 @@
                     android:layout_marginTop="@dimen/space_small"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_airing_date">
+                    app:layout_constraintTop_toBottomOf="@+id/tv_date">
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/chip_genres"

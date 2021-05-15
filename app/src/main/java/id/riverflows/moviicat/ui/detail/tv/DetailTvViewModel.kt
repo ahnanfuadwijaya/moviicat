@@ -16,10 +16,20 @@ class DetailTvViewModel(private val repository: DetailRepository): ViewModel() {
     val tv: LiveData<Resource<TvDetailResponse>> = _tv
     private val _insertResult = MutableLiveData<Long>()
     val insertResult: LiveData<Long> = _insertResult
+    private val _removeResult = MutableLiveData<Int>()
+    val removeResult: LiveData<Int> = _removeResult
+    private val _isFavorite = MutableLiveData<FavoriteEntity>()
+    val isFavorite: LiveData<FavoriteEntity> = _isFavorite
     fun getTv(tvId: Long) = viewModelScope.launch(Dispatchers.IO){
         _tv.postValue(repository.getDetailTv(tvId))
     }
     fun insertFavorite(data: FavoriteEntity) = viewModelScope.launch(Dispatchers.IO) {
         _insertResult.postValue(repository.insertFavorite(data))
+    }
+    fun removeFavorite(data: FavoriteEntity) = viewModelScope.launch(Dispatchers.IO){
+        _removeResult.postValue(repository.removeFavorite(data))
+    }
+    fun findFavoriteByIdAndType(id: Long, type: String) = viewModelScope.launch(Dispatchers.IO){
+        _isFavorite.postValue(repository.findFavoriteByIdAndType(id, type))
     }
 }

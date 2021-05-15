@@ -14,7 +14,7 @@ import id.riverflows.moviicat.data.entity.GenreEntity
 import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
-import id.riverflows.moviicat.databinding.ActivityDetailTvBinding
+import id.riverflows.moviicat.databinding.ActivityDetailBinding
 import id.riverflows.moviicat.di.Injection
 import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.util.*
@@ -22,10 +22,11 @@ import timber.log.Timber
 import java.util.*
 
 class DetailTvActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityDetailTvBinding
+    private lateinit var binding: ActivityDetailBinding
     private lateinit var viewModel: DetailTvViewModel
     private var tvName = ""
     private var favoriteData: FavoriteEntity? = null
+    private var isFavorite = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupView()
@@ -35,11 +36,12 @@ class DetailTvActivity : AppCompatActivity() {
     }
 
     private fun setupView(){
-        binding = ActivityDetailTvBinding.inflate(layoutInflater)
+        binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title = getString(R.string.title_detail_tv_show)
         binding.fabFavorite.setOnClickListener {
-            favoriteData?.let { viewModel.insertFavorite(it) }
+            favoriteData?.let {
+                if(isFavorite) viewModel.removeFavorite(it) else viewModel.insertFavorite(it)}
         }
     }
 
@@ -52,6 +54,11 @@ class DetailTvActivity : AppCompatActivity() {
         val tvId = intent.getLongExtra(UtilConstants.EXTRA_TV_ID, 0)
         viewModel.getTv(tvId)
         setLoadingState(true)
+        getFavoriteState(tvId)
+    }
+
+    private fun getFavoriteState(id: Long){
+        viewModel.findFavoriteByIdAndType(id, UtilConstants.TYPE_TV)
     }
 
     private fun observeViewModel(){
@@ -68,11 +75,27 @@ class DetailTvActivity : AppCompatActivity() {
             }
         }
         viewModel.insertResult.observe(this){
-            if(it>0){
+            isFavorite = if(it>0){
                 Timber.d("Insert Success")
+                true
             }else{
                 Timber.d("Insert Failed")
+                false
             }
+            setFabState(isFavorite)
+        }
+        viewModel.removeResult.observe(this){
+            if(it>0){
+                isFavorite = false
+                setFabState(isFavorite)
+                Timber.d("Remove Success")
+            }else{
+                Timber.d("Remove Failed")
+            }
+        }
+        viewModel.isFavorite.observe(this){
+            isFavorite = it != null
+            setFabState(isFavorite)
         }
     }
 
@@ -88,11 +111,11 @@ class DetailTvActivity : AppCompatActivity() {
                     .error(R.drawable.ic_broken_image)
                     .override(UtilConstants.DETAIL_POSTER_WIDTH, UtilConstants.DETAIL_POSTER_HEIGHT)
                     .into(ivPoster)
-            tvName.text = data.name
+            tvTitle.text = data.name
             tvPopularity.text = getString(R.string.field_popularity, data.popularity)
             tvRate.text = data.voteAverage.toString()
-            tvAiringDate.text = getString(R.string.field_airing_date, data.firstAirDate, data.lastAirDate)
-            tvAiringStatus.text = data.status
+            tvDate.text = getString(R.string.field_airing_date, data.firstAirDate, data.lastAirDate)
+            tvStatus.text = data.status
             inflateChips(data.genres)
             tvValueOverview.text = data.overview
         }
@@ -133,6 +156,15 @@ class DetailTvActivity : AppCompatActivity() {
                 viewContainer.visibility = View.VISIBLE
                 shimmerContainer.visibility = View.INVISIBLE
                 shimmerContainer.stopShimmerAnimation()
+            }
+        }
+    }
+    private fun setFabState(isFavorite: Boolean){
+        with(binding.fabFavorite){
+            if(isFavorite){
+                setImageResource(R.drawable.ic_favorite)
+            }else{
+                setImageResource(R.drawable.ic_favorite_border)
             }
         }
     }
