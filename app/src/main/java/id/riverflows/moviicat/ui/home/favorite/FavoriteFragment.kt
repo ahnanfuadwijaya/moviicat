@@ -14,6 +14,7 @@ import id.riverflows.moviicat.databinding.FragmentGridOrListBinding
 import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.detail.movie.DetailMovieActivity
 import id.riverflows.moviicat.ui.detail.tv.DetailTvActivity
+import id.riverflows.moviicat.ui.home.HomeSharedViewModel
 import id.riverflows.moviicat.util.UtilConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,7 +24,7 @@ class FavoriteFragment : Fragment(), FavoritePagedListAdapter.OnItemClickCallbac
     private var _binding: FragmentGridOrListBinding? = null
     private val binding
         get() = _binding as FragmentGridOrListBinding
-    private lateinit var viewModel: FavoriteViewModel
+    private lateinit var viewModel: HomeSharedViewModel
     private val rvAdapter = FavoritePagedListAdapter()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +52,7 @@ class FavoriteFragment : Fragment(), FavoritePagedListAdapter.OnItemClickCallbac
 
     private fun obtainViewModel(){
         val factory = ViewModelFactory.getInstance()
-        viewModel = ViewModelProvider(viewModelStore, factory)[FavoriteViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity(), factory)[HomeSharedViewModel::class.java]
     }
 
     private fun observeViewModel(){

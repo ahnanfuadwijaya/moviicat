@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import id.riverflows.moviicat.R
 import id.riverflows.moviicat.databinding.FragmentHomeBinding
@@ -28,6 +29,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupUI(){
+        binding.tabs.addOnTabSelectedListener(tabSelectedListener)
         pagerAdapter = HomeSectionsPagerAdapter(parentFragmentManager, lifecycle)
         with(binding){
             binding.viewPager.adapter = pagerAdapter
@@ -36,6 +38,19 @@ class HomeFragment : Fragment() {
                 tab.text = titles[position]
             }.attach()
         }
+    }
+
+    private val tabSelectedListener = object : TabLayout.OnTabSelectedListener {
+        override fun onTabSelected(tab: TabLayout.Tab?) {
+
+        }
+
+        override fun onTabUnselected(tab: TabLayout.Tab?) {
+        }
+
+        override fun onTabReselected(tab: TabLayout.Tab?) {
+        }
+
     }
 
     override fun onDestroy() {

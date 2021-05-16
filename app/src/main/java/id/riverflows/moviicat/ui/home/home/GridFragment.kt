@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,20 +16,20 @@ import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.decoration.SpaceItemDecoration
 import id.riverflows.moviicat.ui.detail.movie.DetailMovieActivity
 import id.riverflows.moviicat.ui.detail.tv.DetailTvActivity
+import id.riverflows.moviicat.ui.home.HomeSharedViewModel
 import id.riverflows.moviicat.ui.home.movie.MoviePagedAdapter
-import id.riverflows.moviicat.ui.home.movie.MovieViewModel
 import id.riverflows.moviicat.ui.home.tv.TvPagedAdapter
-import id.riverflows.moviicat.ui.home.tv.TvViewModel
 import id.riverflows.moviicat.util.UtilConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class GridFragment(private val type: String) : Fragment(){
     private var _binding: FragmentGridOrListBinding? = null
     private val binding
         get() = _binding as FragmentGridOrListBinding
-    private lateinit var viewModel: ViewModel
+    private lateinit var viewModel: HomeSharedViewModel
     private val movieAdapter = MoviePagedAdapter()
     private val tvAdapter = TvPagedAdapter()
     private val loadingStateAdapter = HomeLoadStateAdapter()
@@ -49,15 +48,12 @@ class GridFragment(private val type: String) : Fragment(){
         setupCallback()
         obtainViewModel()
         observeViewModel()
+        Timber.d(type)
     }
 
     private fun obtainViewModel(){
         val factory = ViewModelFactory.getInstance()
-        viewModel = if(type == TYPE_MOVIE) {
-            ViewModelProvider(requireActivity(), factory)[MovieViewModel::class.java]
-        }else{
-            ViewModelProvider(requireActivity(), factory)[TvViewModel::class.java]
-        }
+        viewModel = ViewModelProvider(requireActivity(), factory)[HomeSharedViewModel::class.java]
     }
 
     private fun setupView(){
@@ -101,11 +97,11 @@ class GridFragment(private val type: String) : Fragment(){
     private fun observeViewModel(){
         lifecycleScope.launch(Dispatchers.Main){
             if(type == TYPE_MOVIE){
-                (viewModel as MovieViewModel).moviePaged.collectLatest { pagingData ->
+                viewModel.moviePaged.collectLatest { pagingData ->
                     movieAdapter.submitData(pagingData)
                 }
             }else{
-                (viewModel as TvViewModel).tvPaged.collectLatest { pagingData ->
+                viewModel.tvPaged.collectLatest { pagingData ->
                     tvAdapter.submitData(pagingData)
                 }
             }

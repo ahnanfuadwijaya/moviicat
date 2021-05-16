@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.verify
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.response.MovieListResponse
 import id.riverflows.moviicat.data.source.repository.ListRepository
+import id.riverflows.moviicat.ui.home.HomeSharedViewModel
 import id.riverflows.moviicat.util.UtilDataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +31,7 @@ import org.mockito.junit.MockitoJUnitRunner
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class MovieViewModelTest {
-    private lateinit var viewModel: MovieViewModel
+    private lateinit var viewModel: HomeSharedViewModel
     @get:Rule
     val coroutineScope =  MainCoroutineScopeRule()
     @get:Rule
@@ -47,7 +48,7 @@ class MovieViewModelTest {
 
     @Before
     fun setup(){
-        viewModel = MovieViewModel(repository)
+        viewModel = HomeSharedViewModel(repository)
         Dispatchers.setMain(testDispatcher)
     }
 

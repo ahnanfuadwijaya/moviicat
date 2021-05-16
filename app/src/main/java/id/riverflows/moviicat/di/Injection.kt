@@ -13,10 +13,7 @@ import id.riverflows.moviicat.data.source.repository.DetailRepository
 import id.riverflows.moviicat.data.source.repository.ListRepository
 import id.riverflows.moviicat.ui.detail.movie.DetailMovieViewModel
 import id.riverflows.moviicat.ui.detail.tv.DetailTvViewModel
-import id.riverflows.moviicat.ui.home.favorite.FavoriteViewModel
-import id.riverflows.moviicat.ui.home.movie.MovieViewModel
-import id.riverflows.moviicat.ui.home.search.SearchViewModel
-import id.riverflows.moviicat.ui.home.tv.TvViewModel
+import id.riverflows.moviicat.ui.home.HomeSharedViewModel
 
 object Injection {
     private lateinit var application: Application
@@ -25,22 +22,13 @@ object Injection {
     }
     fun <T : ViewModel?> provideViewModelRepository(modelClass: Class<T>): BaseRepository {
         return when{
-            modelClass.isAssignableFrom(MovieViewModel::class.java) -> {
-                ListRepository(ApiBuilder.build(ListApiService::class.java), provideFavoriteDao())
-            }
-            modelClass.isAssignableFrom(TvViewModel::class.java) -> {
-                ListRepository(ApiBuilder.build(ListApiService::class.java), provideFavoriteDao())
-            }
             modelClass.isAssignableFrom(DetailMovieViewModel::class.java) -> {
                 DetailRepository(ApiBuilder.build(DetailApiService::class.java), provideFavoriteDao())
             }
             modelClass.isAssignableFrom(DetailTvViewModel::class.java) ->{
                 DetailRepository(ApiBuilder.build(DetailApiService::class.java), provideFavoriteDao())
             }
-            modelClass.isAssignableFrom(FavoriteViewModel::class.java) ->{
-                ListRepository(ApiBuilder.build(ListApiService::class.java), provideFavoriteDao())
-            }
-            modelClass.isAssignableFrom(SearchViewModel::class.java) ->{
+            modelClass.isAssignableFrom(HomeSharedViewModel::class.java) ->{
                 ListRepository(ApiBuilder.build(ListApiService::class.java), provideFavoriteDao())
             }
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)

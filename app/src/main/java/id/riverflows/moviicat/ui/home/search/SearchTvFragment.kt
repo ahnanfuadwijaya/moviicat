@@ -13,6 +13,7 @@ import id.riverflows.moviicat.data.entity.TvEntity
 import id.riverflows.moviicat.databinding.FragmentGridOrListBinding
 import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.detail.tv.DetailTvActivity
+import id.riverflows.moviicat.ui.home.HomeSharedViewModel
 import id.riverflows.moviicat.util.UtilConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -23,7 +24,7 @@ class SearchTvFragment : Fragment(), SearchTvPagedAdapter.OnItemClickCallback {
     private val binding
         get() = _binding as FragmentGridOrListBinding
     private val tvAdapter = SearchTvPagedAdapter()
-    private lateinit var viewModel: SearchViewModel
+    private lateinit var viewModel: HomeSharedViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,7 +48,7 @@ class SearchTvFragment : Fragment(), SearchTvPagedAdapter.OnItemClickCallback {
     }
     private fun obtainViewModel(){
         val factory = ViewModelFactory.getInstance()
-        viewModel = ViewModelProvider(viewModelStore, factory)[SearchViewModel::class.java]
+        viewModel = ViewModelProvider(viewModelStore, factory)[HomeSharedViewModel::class.java]
     }
 
     fun searchTv(query: String){

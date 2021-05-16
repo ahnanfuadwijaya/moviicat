@@ -14,6 +14,7 @@ import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.databinding.FragmentGridOrListBinding
 import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.detail.movie.DetailMovieActivity
+import id.riverflows.moviicat.ui.home.HomeSharedViewModel
 import id.riverflows.moviicat.util.UtilConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -26,7 +27,7 @@ class SearchMovieFragment : Fragment(), SearchMoviePagedAdapter.OnItemClickCallb
     private val binding
         get() = _binding as FragmentGridOrListBinding
     private val movieAdapter = SearchMoviePagedAdapter()
-    private val viewModel by viewModels<SearchViewModel> { ViewModelFactory.getInstance() }
+    private lateinit var viewModel: HomeSharedViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,6 +39,12 @@ class SearchMovieFragment : Fragment(), SearchMoviePagedAdapter.OnItemClickCallb
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupView()
+        obtainViewModel()
+    }
+
+    private fun obtainViewModel(){
+        val factory = ViewModelFactory.getInstance()
+        viewModel = ViewModelProvider(requireActivity(), factory)[HomeSharedViewModel::class.java]
     }
 
     private fun setupView(){
