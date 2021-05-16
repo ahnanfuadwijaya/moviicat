@@ -60,11 +60,7 @@ class GridFragment(private val type: String) : Fragment(){
         with(binding.rvGridOrList){
             layoutManager = GridLayoutManager(context, UtilConstants.GRID_COUNT)
             addItemDecoration(SpaceItemDecoration(UtilConstants.SPACE_ITEM_DECORATION))
-            adapter = if(type == TYPE_MOVIE) {
-                movieAdapter
-            } else {
-                tvAdapter
-            }
+            adapter = if(type == TYPE_MOVIE) movieAdapter else tvAdapter
         }
     }
 

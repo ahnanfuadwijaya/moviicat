@@ -3,6 +3,7 @@ package id.riverflows.moviicat.data.source.repository
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.verify
+import id.riverflows.moviicat.data.source.local.room.FavoriteDao
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.api.ListApiService
 import id.riverflows.moviicat.data.source.remote.response.MovieListResponse
@@ -25,7 +26,8 @@ class ListRepositoryTest{
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
     private val apiService = Mockito.mock(ListApiService::class.java)
-    private val repository = FakeListRepository(apiService)
+    private val favoriteDao = Mockito.mock(FavoriteDao::class.java)
+    private val repository = FakeListRepository(apiService, favoriteDao)
     private val dummyPage = 1
     private val dummyTotalPages = 1
     private val dummyTotalResults = 2

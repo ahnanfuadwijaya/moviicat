@@ -6,18 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import id.riverflows.moviicat.R
 import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.databinding.FragmentGridOrListBinding
 import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.detail.movie.DetailMovieActivity
 import id.riverflows.moviicat.ui.home.HomeSharedViewModel
 import id.riverflows.moviicat.util.UtilConstants
+import id.riverflows.moviicat.util.UtilSnackBar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -59,6 +61,9 @@ class SearchMovieFragment : Fragment(), SearchMoviePagedAdapter.OnItemClickCallb
         lifecycleScope.launch(Dispatchers.Main){
             viewModel.getMovieSearchResultPaged(query).collectLatest {
                 movieAdapter.submitData(it)
+            }
+            if(viewModel.getMovieSearchResultPaged(query).count() == 0){
+                UtilSnackBar.showIndeterminate(binding.root, getString(R.string.error_no_result))
             }
         }
         Timber.d(query)

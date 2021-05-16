@@ -9,14 +9,10 @@ import retrofit2.http.Query
 
 interface ListApiService {
     @GET("/3/discover/movie")
-    suspend fun getMovieList(): MovieListResponse
-    @GET("/3/discover/movie")
     suspend fun getMoviePaged(
         @Query("page")page: Long
     ): MovieListResponse
 
-    @GET("/3/discover/tv")
-    suspend fun getTvList(): TvListResponse
     @GET("/3/discover/tv")
     suspend fun getTvPaged(
             @Query("page")page: Long

@@ -1,25 +1,24 @@
 package id.riverflows.moviicat.ui.home.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import id.riverflows.moviicat.R
-import id.riverflows.moviicat.databinding.FragmentHomeBinding
+import id.riverflows.moviicat.databinding.FragmentMovieTvRootBinding
 
 class HomeFragment : Fragment() {
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentMovieTvRootBinding? = null
     private val binding
-        get() = _binding as FragmentHomeBinding
+        get() = _binding as FragmentMovieTvRootBinding
     private lateinit var pagerAdapter: HomeSectionsPagerAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentMovieTvRootBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -29,28 +28,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupUI(){
-        binding.tabs.addOnTabSelectedListener(tabSelectedListener)
-        pagerAdapter = HomeSectionsPagerAdapter(parentFragmentManager, lifecycle)
         with(binding){
+            pagerAdapter = HomeSectionsPagerAdapter(parentFragmentManager, lifecycle)
             binding.viewPager.adapter = pagerAdapter
             TabLayoutMediator(tabs, viewPager) { tab, position ->
                 val titles = resources.getStringArray(R.array.movie_tv_tab_titles)
                 tab.text = titles[position]
             }.attach()
         }
-    }
-
-    private val tabSelectedListener = object : TabLayout.OnTabSelectedListener {
-        override fun onTabSelected(tab: TabLayout.Tab?) {
-
-        }
-
-        override fun onTabUnselected(tab: TabLayout.Tab?) {
-        }
-
-        override fun onTabReselected(tab: TabLayout.Tab?) {
-        }
-
     }
 
     override fun onDestroy() {

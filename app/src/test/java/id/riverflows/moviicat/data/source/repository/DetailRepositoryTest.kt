@@ -3,6 +3,7 @@ package id.riverflows.moviicat.data.source.repository
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.verify
+import id.riverflows.moviicat.data.source.local.room.FavoriteDao
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.api.DetailApiService
 import id.riverflows.moviicat.data.source.remote.response.MovieDetailResponse
@@ -26,7 +27,8 @@ class DetailRepositoryTest{
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
     private val apiService = Mockito.mock(DetailApiService::class.java)
-    private val repository = FakeDetailRepository(apiService)
+    private val favoriteDao = Mockito.mock(FavoriteDao::class.java)
+    private val repository = FakeDetailRepository(apiService, favoriteDao)
     private val dummyErrorCode = 401
     private val movieId = 399566L
     private val tvId = 88396L

@@ -11,15 +11,11 @@ class ListRepository(
     private val api: ListApiService,
     private val favoriteDao: FavoriteDao
 ): BaseRepository() {
-    suspend fun getMovieList() = safeApiCall {
-        api.getMovieList()
-    }
+
     suspend fun getMoviePaged(page: Long) = safeApiCall {
         api.getMoviePaged(page)
     }
-    suspend fun getTvList() = safeApiCall {
-        api.getTvList()
-    }
+
     suspend fun getTvPaged(page: Long) = safeApiCall {
         api.getTvPaged(page)
     }

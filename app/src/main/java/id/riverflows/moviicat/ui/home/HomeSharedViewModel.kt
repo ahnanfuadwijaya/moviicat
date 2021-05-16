@@ -16,15 +16,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeSharedViewModel(private val repository: ListRepository): ViewModel() {
-    private val _movieList = MutableLiveData<Resource<MovieListResponse>>()
-    val movieList: LiveData<Resource<MovieListResponse>> = _movieList
-    private val _tvList = MutableLiveData<Resource<TvListResponse>>()
-    val tvList: LiveData<Resource<TvListResponse>> = _tvList
     fun getFavoritePagedList(): LiveData<PagingData<FavoriteEntity>> = Pager(
         PagingConfig(UtilConstants.DATA_PER_PAGE),
         null,
         repository.getFavoritePagedList().asPagingSourceFactory(Dispatchers.IO)
     ).liveData
+
     val moviePaged = Pager(
         PagingConfig(
             UtilConstants.DATA_PER_PAGE,
@@ -35,12 +32,6 @@ class HomeSharedViewModel(private val repository: ListRepository): ViewModel() {
         PagingDataSource.MoviePaged(repository)
     }.flow.cachedIn(viewModelScope)
 
-    fun getMovieList() = viewModelScope.launch {
-        _movieList.postValue(repository.getMovieList())
-    }
-    fun getTvList() = viewModelScope.launch(Dispatchers.IO){
-        _tvList.postValue(repository.getTvList())
-    }
     val tvPaged = Pager(
         PagingConfig(
             UtilConstants.DATA_PER_PAGE,
@@ -50,6 +41,7 @@ class HomeSharedViewModel(private val repository: ListRepository): ViewModel() {
         ), UtilConstants.INITIAL_KEY){
         PagingDataSource.TvPaged(repository)
     }.flow.cachedIn(viewModelScope)
+
     fun getMovieSearchResultPaged(query: String) = Pager(
         PagingConfig(
             UtilConstants.DATA_PER_PAGE,
@@ -59,6 +51,7 @@ class HomeSharedViewModel(private val repository: ListRepository): ViewModel() {
         ), UtilConstants.INITIAL_KEY){
         PagingDataSource.MovieSearchResultPaged(query, repository)
     }.flow.cachedIn(viewModelScope)
+
     fun getTvSearchResultPaged(query: String) = Pager(
         PagingConfig(
             UtilConstants.DATA_PER_PAGE,
