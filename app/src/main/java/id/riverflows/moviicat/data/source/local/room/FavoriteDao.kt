@@ -15,5 +15,5 @@ interface FavoriteDao {
     @Delete
     suspend fun remove(favorite: FavoriteEntity): Int
     @RawQuery(observedEntities = [FavoriteEntity::class])
-    fun getFavoritePagedList(query: SupportSQLiteQuery): DataSource.Factory<Int, FavoriteEntity>
+    fun getFavoritePaged(query: SupportSQLiteQuery): DataSource.Factory<Int, FavoriteEntity>
 }

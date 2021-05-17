@@ -56,7 +56,7 @@ class FavoriteFragment : Fragment(), FavoritePagedListAdapter.OnItemClickCallbac
     }
 
     private fun observeViewModel(){
-        viewModel.getFavoritePagedList().observe(viewLifecycleOwner){
+        viewModel.favoritePaged.observe(viewLifecycleOwner){
             lifecycleScope.launch(Dispatchers.IO){
                 rvAdapter.submitData(it)
             }

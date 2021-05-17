@@ -10,7 +10,7 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import id.riverflows.moviicat.R
 import id.riverflows.moviicat.util.UtilConstants
-import id.riverflows.moviicat.util.UtilDataDummy
+import id.riverflows.moviicat.utils.UtilDataDummy
 import id.riverflows.moviicat.util.UtilIdlingResource
 import org.junit.After
 import org.junit.Before

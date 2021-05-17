@@ -1,23 +1,63 @@
 @file:Suppress("SpellCheckingInspection")
 
-package id.riverflows.moviicat.util
+package id.riverflows.moviicat.utils
 
 import id.riverflows.moviicat.data.entity.GenreEntity
 import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.data.entity.TvEntity
+import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.data.source.remote.response.MovieDetailResponse
 import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
+import id.riverflows.moviicat.util.UtilConstants
 
 object UtilDataDummy {
-    private val movieList = mutableListOf<MovieEntity>()
-    private val tvList = mutableListOf<TvEntity>()
-    private val movieDetailList = mutableListOf<MovieDetailResponse>()
-    private val tvDetailList = mutableListOf<TvDetailResponse>()
+    private val movieList: List<MovieEntity>
+    private val tvList: List<TvEntity>
+    private val movieDetailList: List<MovieDetailResponse>
+    private val tvDetailList: List<TvDetailResponse>
+    private val favoriteList: List<FavoriteEntity>
     init {
-        movieList.addAll(generateDummyMovieList())
-        tvList.addAll(generateDummyTvList())
-        movieDetailList.addAll(generateMovieDetailList())
-        tvDetailList.addAll(generateTvDetailList())
+        movieList = generateDummyMovieList()
+        tvList = generateDummyTvList()
+        movieDetailList = generateMovieDetailList()
+        tvDetailList = generateTvDetailList()
+        favoriteList = generateFavoriteList()
+    }
+
+    private fun generateFavoriteList(): List<FavoriteEntity>{
+        val list = mutableListOf<FavoriteEntity>()
+        list.addAll(
+            listOf(
+                FavoriteEntity(
+                    399566L,
+                    "Godzilla vs. Kong",
+                    8.3f,
+                    "2021-03-24",
+                    "godzilla_vs_kong",
+                    0L,
+                    UtilConstants.TYPE_MOVIE
+                ),
+                FavoriteEntity(
+                    791373,
+                    "Zack Snyder's Justice League",
+                    8.3f,
+                    "2021-03-18",
+                    "zack_snyders_justice_league",
+                    1L,
+                    UtilConstants.TYPE_MOVIE
+                ),
+                FavoriteEntity(
+                        88396,
+                    "The Falcon and the Winter Soldier",
+                    7.9f,
+                    "2021-03-19",
+                    "the_falcon_and_the_winter_soldier",
+                    2L,
+                    UtilConstants.TYPE_TV
+                )
+            )
+        )
+        return list
     }
 
     private fun generateMovieDetailList(): List<MovieDetailResponse>{
@@ -372,6 +412,15 @@ object UtilDataDummy {
     fun getDetailTv(tvId: Long): TvDetailResponse?{
         for(item in tvDetailList){
             if(item.id == tvId) return item
+        }
+        return null
+    }
+
+    fun getFavoriteList(): List<FavoriteEntity> = favoriteList
+
+    fun getFavoriteByIdAndType(id: Long, type: String): FavoriteEntity?{
+        for(item in favoriteList){
+            if(item.id == id && item.type == type) return item
         }
         return null
     }

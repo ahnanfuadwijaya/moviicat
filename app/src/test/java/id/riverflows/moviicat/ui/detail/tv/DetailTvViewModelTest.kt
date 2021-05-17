@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.verify
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
 import id.riverflows.moviicat.data.source.repository.DetailRepository
-import id.riverflows.moviicat.util.UtilDataDummy
+import id.riverflows.moviicat.utils.UtilDataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

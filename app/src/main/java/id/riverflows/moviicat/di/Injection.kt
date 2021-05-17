@@ -20,7 +20,7 @@ object Injection {
     fun init(application: Application) {
         this.application = application
     }
-    fun <T : ViewModel?> provideViewModelRepository(modelClass: Class<T>): BaseRepository {
+    fun <T : ViewModel?> provideViewModelRepository(modelClass: Class<T>): Any {
         return when{
             modelClass.isAssignableFrom(DetailMovieViewModel::class.java) -> {
                 DetailRepository(ApiBuilder.build(DetailApiService::class.java), provideFavoriteDao())

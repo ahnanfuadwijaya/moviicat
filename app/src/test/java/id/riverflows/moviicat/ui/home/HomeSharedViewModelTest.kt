@@ -1,23 +1,21 @@
 package id.riverflows.moviicat.ui.home
 
-import android.content.ClipData
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
-import androidx.paging.*
-import com.nhaarman.mockitokotlin2.mock
+import androidx.paging.PagingData
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import id.riverflows.moviicat.data.entity.MovieEntity
-import id.riverflows.moviicat.data.source.remote.Resource
-import id.riverflows.moviicat.data.source.remote.response.MovieListResponse
+import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.data.source.repository.ListRepository
-import id.riverflows.moviicat.paging.PagingDataSource
-import id.riverflows.moviicat.util.UtilConstants
-import id.riverflows.moviicat.util.UtilDataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
+import id.riverflows.moviicat.utils.UtilDataDummy
+import id.riverflows.moviicat.utils.UtilPagingData.collectDataForTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -35,39 +33,47 @@ import kotlin.test.assertNotNull
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class HomeSharedViewModelTest{
-    private lateinit var viewModel: HomeSharedViewModel
     @get:Rule
     val coroutineScope =  MainCoroutineScopeRule()
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
     @Mock
-    private lateinit var movieObserver: Observer<Resource<MovieListResponse>>
+    private lateinit var favoriteObserver: Observer<PagingData<FavoriteEntity>>
     @Mock
     private lateinit var repository: ListRepository
     private val testDispatcher = TestCoroutineDispatcher()
-    private val dummyPage = 1
-    private val dummyTotalPages = 1
-    private val dummyTotalResults = 2
-    private val dummyHttpErrorCode = 401
+    private val dummyQuery = "dummy query"
 
     @Before
     fun setup(){
-        viewModel = HomeSharedViewModel(repository)
         Dispatchers.setMain(testDispatcher)
     }
 
     @Test
-    fun getFavoritePagedList(){
-        //TODO Test getFavoritePagedList
+    fun getFavoritePaged(){
+        val dummyList = UtilDataDummy.getFavoriteList()
+        val mutableLiveData = MutableLiveData<PagingData<FavoriteEntity>>()
+        mutableLiveData.observeForever(favoriteObserver)
+        runBlocking {
+            delay(500)
+            mutableLiveData.value = PagingData.from(dummyList)
+            whenever(repository.getFavoritePaged()).thenReturn(mutableLiveData)
+            val pagingLiveData = repository.getFavoritePaged()
+            val list = pagingLiveData.value?.collectDataForTest()
+            verify(favoriteObserver).onChanged(mutableLiveData.value)
+            assertNotNull(list)
+            assertEquals(dummyList, list)
+            assertEquals(dummyList.size, list.size)
+        }
+        mutableLiveData.removeObserver(favoriteObserver)
     }
 
     @Test
-    fun getMoviePaged(){
-        val viewModel: HomeSharedViewModel = mock()
+    fun moviePaged(){
         val dummyList = UtilDataDummy.getMovieList()
         runBlocking {
-            whenever(viewModel.moviePaged).thenReturn(flowOf(PagingData.from(dummyList)))
-            val pagingData = viewModel.moviePaged
+            whenever(repository.getMoviePaged()).thenReturn(flowOf(PagingData.from(dummyList)))
+            val pagingData = repository.getMoviePaged()
             pagingData.collect {
                 val list = it.collectDataForTest()
                 assertNotNull(list)
@@ -78,48 +84,53 @@ class HomeSharedViewModelTest{
     }
 
     @Test
-    fun getTvPaged(){
-        //TODO Test tvPaged
+    fun tvPaged(){
+        val dummyList = UtilDataDummy.getTvList()
+        runBlocking {
+            whenever(repository.getTvPaged()).thenReturn(flowOf(PagingData.from(dummyList)))
+            val pagingData = repository.getTvPaged()
+            pagingData.collect {
+                val list = it.collectDataForTest()
+                assertNotNull(list)
+                assertEquals(dummyList, list)
+                assertEquals(dummyList.size, list.size)
+            }
+        }
     }
 
     @Test
     fun getMovieSearchResultPaged(){
-        //TODO Test getMovieSearchResultPaged
+        val dummyList = UtilDataDummy.getMovieList()
+        runBlocking {
+            whenever(repository.getMovieSearchResultPaged(dummyQuery)).thenReturn(flowOf(PagingData.from(dummyList)))
+            val pagingData = repository.getMovieSearchResultPaged(dummyQuery)
+            pagingData.collect {
+                val list = it.collectDataForTest()
+                assertNotNull(list)
+                assertEquals(dummyList, list)
+                assertEquals(dummyList.size, list.size)
+            }
+        }
     }
 
     @Test
     fun getTvSearchResultPaged(){
-        //TODO Test getTvSearchResultPaged
+        val dummyList = UtilDataDummy.getTvList()
+        runBlocking {
+            whenever(repository.getTvSearchResultPaged(dummyQuery)).thenReturn(flowOf(PagingData.from(dummyList)))
+            val pagingData = repository.getTvSearchResultPaged(dummyQuery)
+            pagingData.collect {
+                val list = it.collectDataForTest()
+                assertNotNull(list)
+                assertEquals(dummyList, list)
+                assertEquals(dummyList.size, list.size)
+            }
+        }
     }
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
         testDispatcher.cleanupTestCoroutines()
-    }
-
-    private suspend fun <T : Any> PagingData<T>.collectDataForTest(): List<T> {
-        val dcb = object : DifferCallback {
-            override fun onChanged(position: Int, count: Int) {}
-            override fun onInserted(position: Int, count: Int) {}
-            override fun onRemoved(position: Int, count: Int) {}
-        }
-        val items = mutableListOf<T>()
-        val dif = object : PagingDataDiffer<T>(dcb, TestCoroutineDispatcher()) {
-            override suspend fun presentNewList(
-                previousList: NullPaddedList<T>,
-                newList: NullPaddedList<T>,
-                newCombinedLoadStates: CombinedLoadStates,
-                lastAccessedIndex: Int,
-                onListPresentable: () -> Unit
-            ): Int? {
-                for (idx in 0 until newList.size)
-                    items.add(newList.getFromStorage(idx))
-                onListPresentable()
-                return null
-            }
-        }
-        dif.collectFrom(this)
-        return items
     }
 }
