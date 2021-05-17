@@ -1,9 +1,7 @@
 package id.riverflows.moviicat.data.source.repository
 
-import androidx.paging.DataSource
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import androidx.lifecycle.LiveData
+import androidx.paging.*
 import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.data.entity.TvEntity
 import id.riverflows.moviicat.data.source.local.room.FavoriteDao
@@ -12,6 +10,7 @@ import id.riverflows.moviicat.data.source.remote.api.ListApiService
 import id.riverflows.moviicat.paging.PagingDataSource
 import id.riverflows.moviicat.util.UtilConstants
 import id.riverflows.moviicat.util.UtilQuery
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 
 class FakeListRepository(
@@ -42,9 +41,13 @@ class FakeListRepository(
         }.flow
     }
 
-    fun getFavoritePaged():  DataSource.Factory<Int, FavoriteEntity>{
+    fun getFavoritePaged(): LiveData<PagingData<FavoriteEntity>> {
         val query = UtilQuery.buildQuery(UtilQuery.GET_ALL_FAVORITE_LIST)
-        return favoriteDao.getFavoritePaged(query)
+        return Pager(
+            PagingConfig(UtilConstants.DATA_PER_PAGE),
+            null,
+            favoriteDao.getFavoritePaged(query).asPagingSourceFactory(Dispatchers.IO)
+        ).liveData
     }
 
     fun getMovieSearchResultPaged(query: String): Flow<PagingData<MovieEntity>> {

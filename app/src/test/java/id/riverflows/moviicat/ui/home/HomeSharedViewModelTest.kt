@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
+import id.riverflows.moviicat.data.source.repository.FakeListRepository
 import id.riverflows.moviicat.data.source.repository.ListRepository
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import id.riverflows.moviicat.utils.UtilDataDummy
@@ -40,7 +41,7 @@ class HomeSharedViewModelTest{
     @Mock
     private lateinit var favoriteObserver: Observer<PagingData<FavoriteEntity>>
     @Mock
-    private lateinit var repository: ListRepository
+    private lateinit var repository: FakeListRepository
     private val testDispatcher = TestCoroutineDispatcher()
     private val dummyQuery = "dummy query"
 

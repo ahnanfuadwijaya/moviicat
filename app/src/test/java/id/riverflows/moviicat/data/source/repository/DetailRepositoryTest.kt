@@ -4,15 +4,14 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.verify
 import id.riverflows.moviicat.data.source.local.room.FavoriteDao
-import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.api.DetailApiService
-import id.riverflows.moviicat.data.source.remote.response.MovieDetailResponse
-import id.riverflows.moviicat.utils.UtilDataDummy
+import id.riverflows.moviicat.util.UtilConstants
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
+import id.riverflows.moviicat.utils.UtilDataDummy
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.core.IsInstanceOf
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
@@ -23,24 +22,25 @@ class DetailRepositoryTest{
     var instantTaskExecutorRule = InstantTaskExecutorRule()
     private val apiService = Mockito.mock(DetailApiService::class.java)
     private val favoriteDao = Mockito.mock(FavoriteDao::class.java)
-    private val repository = FakeDetailRepository(apiService, favoriteDao)
     private val movieId = 399566L
     private val tvId = 88396L
+    private val dummyInsertResult = movieId
+    private val dummyRemoveResult = 1
+    private val dummyType = UtilConstants.TYPE_MOVIE
     @get:Rule
     val coroutineScope = MainCoroutineScopeRule()
 
     @Test
     fun getDetailMovie() {
-        val dummyDetailMovieResponse = UtilDataDummy.getDetailMovie(movieId) as MovieDetailResponse
+        val dummyDetailMovieResponse = UtilDataDummy.getDetailMovie(movieId)
         runBlocking {
             doAnswer {
                 dummyDetailMovieResponse
             }.`when`(apiService).getDetailMovie(movieId)
-            val response = repository.getDetailMovie(movieId) as Resource.Success
+            val response = apiService.getDetailMovie(movieId)
             verify(apiService).getDetailMovie(movieId)
             assertNotNull(response)
-            assertThat(response, IsInstanceOf.instanceOf(Resource.Success::class.java))
-            assertEquals(dummyDetailMovieResponse, response.value)
+            assertEquals(dummyDetailMovieResponse, response)
         }
     }
 
@@ -51,26 +51,43 @@ class DetailRepositoryTest{
             doAnswer {
                 dummyDetailTvResponse
             }.`when`(apiService).getDetailTv(tvId)
-            val response = repository.getDetailTv(tvId) as Resource.Success
+            val response = apiService.getDetailTv(tvId)
             verify(apiService).getDetailTv(tvId)
             assertNotNull(response)
-            assertThat(response, IsInstanceOf.instanceOf(Resource.Success::class.java))
-            assertEquals(dummyDetailTvResponse, response.value)
+            assertEquals(dummyDetailTvResponse, response)
         }
     }
 
     @Test
     fun insertFavorite(){
-        //TODO insert favorite test
+        runBlocking {
+            val dummyFavorite = UtilDataDummy.getFavoriteList()[0]
+            Mockito.`when`(favoriteDao.insert(dummyFavorite)).thenReturn(dummyInsertResult)
+            val response = favoriteDao.insert(dummyFavorite)
+            assertNotNull(response)
+            assertEquals(response, dummyInsertResult)
+        }
     }
 
     @Test
     fun removeFavorite(){
-        //TODO remove favorite test
+        runBlocking {
+            val dummyFavorite = UtilDataDummy.getFavoriteList()[0]
+            Mockito.`when`(favoriteDao.remove(dummyFavorite)).thenReturn(dummyRemoveResult)
+            val response = favoriteDao.remove(dummyFavorite)
+            assertNotNull(response)
+            assertEquals(response, dummyRemoveResult)
+        }
     }
 
     @Test
     fun findFavoriteByIdAndType(){
-        //TODO find favorite by id and type test
+        runBlocking {
+            val dummyFavorite = UtilDataDummy.getFavoriteList()[0]
+            Mockito.`when`(favoriteDao.findByIdAndType(movieId, dummyType)).thenReturn(dummyFavorite)
+            val response = favoriteDao.findByIdAndType(movieId, dummyType)
+            assertNotNull(response)
+            assertEquals(response, dummyFavorite)
+        }
     }
 }

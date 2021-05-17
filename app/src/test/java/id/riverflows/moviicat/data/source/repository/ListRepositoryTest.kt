@@ -1,84 +1,122 @@
 package id.riverflows.moviicat.data.source.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockitokotlin2.doAnswer
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.paging.Pager
+import androidx.paging.PagingData
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import id.riverflows.moviicat.data.source.local.room.FavoriteDao
-import id.riverflows.moviicat.data.source.remote.Resource
-import id.riverflows.moviicat.data.source.remote.api.ListApiService
-import id.riverflows.moviicat.data.source.remote.response.MovieListResponse
-import id.riverflows.moviicat.data.source.remote.response.TvListResponse
+import com.nhaarman.mockitokotlin2.whenever
+import id.riverflows.moviicat.data.entity.MovieEntity
+import id.riverflows.moviicat.data.entity.TvEntity
+import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import id.riverflows.moviicat.utils.UtilDataDummy
+import id.riverflows.moviicat.utils.UtilPagingData.collectDataForTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.core.IsInstanceOf
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito
 
 @ExperimentalCoroutinesApi
 class ListRepositoryTest{
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
-    private val apiService = Mockito.mock(ListApiService::class.java)
-    private val favoriteDao = Mockito.mock(FavoriteDao::class.java)
-    private val dummyPage = 1
-    private val dummyTotalPages = 1
-    private val dummyTotalResults = 2
     @get:Rule
     val coroutineScope = MainCoroutineScopeRule()
-
     @Test
     fun getMoviePaged() {
         val dummyMovieList = UtilDataDummy.getMovieList()
-        val dummyResponse = MovieListResponse(dummyPage, dummyMovieList, dummyTotalPages, dummyTotalResults)
+        val pager: Pager<Long, MovieEntity> = mock()
         runBlocking {
-            doAnswer {
-                dummyResponse
-            }.`when`(apiService).getMoviePaged(1)
-            val response = apiService.getMoviePaged(1)
-            verify(apiService).getMoviePaged(1)
-            assertNotNull(response)
-            assertEquals(dummyPage, response.page)
-            assertEquals(dummyTotalPages, response.totalPages)
-            assertEquals(dummyTotalResults, response.totalResults)
-            assertEquals(dummyMovieList, response.data)
+            whenever(pager.flow).thenReturn(flowOf(PagingData.from(dummyMovieList)))
+            val data = pager.flow
+            assertNotNull(data)
+            data.collect {
+                val list = it.collectDataForTest()
+                assertNotNull(list)
+                assertEquals(dummyMovieList.size, list.size)
+                assertEquals(dummyMovieList, list)
+            }
         }
     }
 
     @Test
     fun getTvPaged() {
         val dummyTvList = UtilDataDummy.getTvList()
-        val dummyResponse = TvListResponse(dummyPage, dummyTvList, dummyTotalPages, dummyTotalResults)
+        val pager: Pager<Long, TvEntity> = mock()
         runBlocking {
-            doAnswer {
-                dummyResponse
-            }.`when`(apiService).getTvPaged(1)
-            val response = apiService.getTvPaged(1)
-            verify(apiService).getTvPaged(1)
-            assertNotNull(response)
-            assertThat(response, IsInstanceOf.instanceOf(Resource.Success::class.java))
-            assertEquals(dummyPage, response.page)
-            assertEquals(dummyTotalPages, response.totalPages)
-            assertEquals(dummyTotalResults, response.totalResults)
-            assertEquals(dummyTvList, response.data)
+            whenever(pager.flow).thenReturn(flowOf(PagingData.from(dummyTvList)))
+            val data = pager.flow
+            assertNotNull(data)
+            data.collect {
+                val list = it.collectDataForTest()
+                assertNotNull(list)
+                assertEquals(dummyTvList.size, list.size)
+                assertEquals(dummyTvList, list)
+            }
         }
     }
 
     @Test
     fun getFavoritePaged(){
-        //TODO get favorite paged test
+        val dummyFavoriteList = UtilDataDummy.getFavoriteList()
+        val pager: Pager<Int, FavoriteEntity> = mock()
+        runBlocking {
+            whenever(pager.flow).thenReturn(flowOf(PagingData.from(dummyFavoriteList)))
+            val data = pager.flow
+            assertNotNull(data)
+            val liveData = MutableLiveData<PagingData<FavoriteEntity>>()
+            val observer: Observer<PagingData<FavoriteEntity>> = mock()
+            liveData.observeForever(observer)
+            data.collect {
+                liveData.value = it
+                val list = it.collectDataForTest()
+                verify(observer).onChanged(it)
+                assertNotNull(list)
+                assertEquals(dummyFavoriteList.size, list.size)
+                assertEquals(dummyFavoriteList, list)
+                liveData.removeObserver(observer)
+            }
+        }
     }
 
     @Test
     fun getMovieSearchResultPaged(){
-        //TODO get movie search result paged test
+        val dummyMovieSearchResult = UtilDataDummy.getMovieList()
+        val pager: Pager<Long, MovieEntity> = mock()
+        runBlocking {
+            whenever(pager.flow).thenReturn(flowOf(PagingData.from(dummyMovieSearchResult)))
+            val data = pager.flow
+            assertNotNull(data)
+            data.collect {
+                val list = it.collectDataForTest()
+                assertNotNull(list)
+                assertEquals(dummyMovieSearchResult.size, list.size)
+                assertEquals(dummyMovieSearchResult, list)
+            }
+        }
     }
 
     @Test
     fun getTvSearchResultPaged(){
-        //TODO get tv search result paged test
+        val dummyTvSearchResult = UtilDataDummy.getTvList()
+        val pager: Pager<Long, TvEntity> = mock()
+        runBlocking {
+            whenever(pager.flow).thenReturn(flowOf(PagingData.from(dummyTvSearchResult)))
+            val data = pager.flow
+            assertNotNull(data)
+            data.collect {
+                val list = it.collectDataForTest()
+                assertNotNull(list)
+                assertEquals(dummyTvSearchResult.size, list.size)
+                assertEquals(dummyTvSearchResult, list)
+            }
+        }
     }
 }

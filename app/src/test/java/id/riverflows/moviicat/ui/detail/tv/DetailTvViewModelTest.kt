@@ -9,6 +9,7 @@ import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
 import id.riverflows.moviicat.data.source.repository.DetailRepository
+import id.riverflows.moviicat.data.source.repository.FakeDetailRepository
 import id.riverflows.moviicat.util.UtilConstants
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import id.riverflows.moviicat.utils.UtilDataDummy
@@ -36,7 +37,7 @@ class DetailTvViewModelTest{
     private val dummyRemoveResult = 1
     private val dummyType = UtilConstants.TYPE_TV
     @Mock
-    private lateinit var repository: DetailRepository
+    private lateinit var repository: FakeDetailRepository
     @Mock
     private lateinit var observer: Observer<Resource<TvDetailResponse>>
 
