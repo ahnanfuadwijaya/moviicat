@@ -1,13 +1,17 @@
 package id.riverflows.moviicat.ui.detail.tv
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
 import id.riverflows.moviicat.data.source.repository.DetailRepository
-import id.riverflows.moviicat.utils.UtilDataDummy
+import id.riverflows.moviicat.util.UtilConstants
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
+import id.riverflows.moviicat.utils.UtilDataDummy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -15,7 +19,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.hamcrest.core.IsInstanceOf.instanceOf
 import org.junit.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -29,8 +32,9 @@ import kotlin.test.assertTrue
 @RunWith(MockitoJUnitRunner::class)
 class DetailTvViewModelTest{
     private val tvId = 88396L
-    private val dummyHttpErrorCode = 401
-    private lateinit var viewModel: DetailTvViewModel
+    private val dummyInsertResult = tvId
+    private val dummyRemoveResult = 1
+    private val dummyType = UtilConstants.TYPE_TV
     @Mock
     private lateinit var repository: DetailRepository
     @Mock
@@ -45,64 +49,79 @@ class DetailTvViewModelTest{
 
     @Before
     fun setup() {
-        viewModel = DetailTvViewModel(repository)
         Dispatchers.setMain(testDispatcher)
     }
 
     @Test
-    fun getSuccessDetailTv() {
+    fun getDetailTv() {
         val tvDetail = UtilDataDummy.getDetailTv(tvId) as TvDetailResponse
         val dummySuccessResponse: Resource<TvDetailResponse> = Resource.Success(tvDetail)
-        viewModel.tv.observeForever(observer)
+        val liveData = MutableLiveData<Resource<TvDetailResponse>>()
+        liveData.observeForever(observer)
         runBlocking {
             `when`(repository.getDetailTv(tvId)).thenReturn(dummySuccessResponse)
-            viewModel.getTv(tvId)
+            val response = repository.getDetailTv(tvId)
+            liveData.value = response
             delay(500)
             verify(observer).onChanged(dummySuccessResponse)
-            val response = viewModel.tv.value
             assertNotNull(response)
-            assertTrue(response is Resource.Success)
-            Assert.assertThat(
-                response.value,
-                instanceOf(TvDetailResponse::class.java)
-            )
-            assertEquals(response.value, tvDetail)
-            viewModel.tv.removeObserver(observer)
+            Assert.assertTrue(liveData.value is Resource.Success)
+            assertEquals((liveData.value as Resource.Success).value, tvDetail)
+            liveData.removeObserver(observer)
         }
     }
 
     @Test
-    fun getNetworkErrorDetailTv(){
-        val dummyNetworkErrorResponse: Resource<TvDetailResponse> = Resource.Failure(null)
-        viewModel.tv.observeForever(observer)
+    fun insertFavorite(){
+        val dummyFavorite = UtilDataDummy.getFavoriteList()[0]
+        val observer: Observer<Long> = mock()
+        val findResultLiveData = MutableLiveData<Long>()
+        findResultLiveData.observeForever(observer)
         runBlocking {
-            `when`(repository.getDetailTv(tvId)).thenReturn(dummyNetworkErrorResponse)
-            viewModel.getTv(tvId)
+            `when`(repository.insertFavorite(dummyFavorite)).thenReturn(dummyInsertResult)
+            val response = repository.insertFavorite(dummyFavorite)
+            findResultLiveData.value = response
             delay(500)
-            verify(observer).onChanged(dummyNetworkErrorResponse)
-            val response = viewModel.tv.value
+            verify(observer).onChanged(response)
             assertNotNull(response)
-            assertTrue(response is Resource.Failure)
-            Assert.assertNull(response.code)
-            viewModel.tv.removeObserver(observer)
+            assertEquals(findResultLiveData.value, dummyInsertResult)
+            findResultLiveData.removeObserver(observer)
         }
     }
 
     @Test
-    fun getHttpErrorDetailTv(){
-        val dummyHttpErrorResponse: Resource<TvDetailResponse> = Resource.Failure(dummyHttpErrorCode)
-        viewModel.tv.observeForever(observer)
+    fun removeFavorite(){
+        val dummyFavorite = UtilDataDummy.getFavoriteList()[0]
+        val observer: Observer<Int> = mock()
+        val removeResultLiveData = MutableLiveData<Int>()
+        removeResultLiveData.observeForever(observer)
         runBlocking {
-            `when`(repository.getDetailTv(tvId)).thenReturn(dummyHttpErrorResponse)
-            viewModel.getTv(tvId)
+            `when`(repository.removeFavorite(dummyFavorite)).thenReturn(dummyRemoveResult)
+            val response = repository.removeFavorite(dummyFavorite)
+            removeResultLiveData.value = response
             delay(500)
-            verify(observer).onChanged(dummyHttpErrorResponse)
-            val response = viewModel.tv.value
+            verify(observer).onChanged(response)
             assertNotNull(response)
-            assertTrue(response is Resource.Failure)
-            assertNotNull(response.code)
-            Assert.assertTrue(response.code in 100..599)
-            viewModel.tv.removeObserver(observer)
+            assertEquals(removeResultLiveData.value, dummyRemoveResult)
+            removeResultLiveData.removeObserver(observer)
+        }
+    }
+
+    @Test
+    fun findFavoriteByIdAndType(){
+        val dummyFavorite = UtilDataDummy.getFavoriteList()[0]
+        val observer: Observer<FavoriteEntity> = mock()
+        val removeResultLiveData = MutableLiveData<FavoriteEntity>()
+        removeResultLiveData.observeForever(observer)
+        runBlocking {
+            `when`(repository.findFavoriteByIdAndType(tvId, dummyType)).thenReturn(dummyFavorite)
+            val response = repository.findFavoriteByIdAndType(tvId, dummyType)
+            removeResultLiveData.value = response
+            delay(500)
+            verify(observer).onChanged(response)
+            assertNotNull(response)
+            assertEquals(removeResultLiveData.value, dummyFavorite)
+            removeResultLiveData.removeObserver(observer)
         }
     }
 
