@@ -31,7 +31,6 @@ class HomeFragmentTest{
 
     @Test
     fun loadMovie() {
-        onView(withId(android.R.id.content)).perform(swipeUp())
         onView(allOf(withId(R.id.rv_grid_or_list), isDisplayed()))
         onView(withId(android.R.id.content)).perform(swipeUp())
         onView(withId(android.R.id.content)).perform(swipeLeft())

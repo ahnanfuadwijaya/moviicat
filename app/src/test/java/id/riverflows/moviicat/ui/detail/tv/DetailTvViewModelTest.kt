@@ -52,7 +52,7 @@ class DetailTvViewModelTest{
     }
 
     @Test
-    fun getDetailTv() {
+    fun detailTv() {
         val tvDetail = UtilDataDummy.getDetailTv(tvId) as TvDetailResponse
         val dummySuccessResponse: Resource<TvDetailResponse> = Resource.Success(tvDetail)
         val liveData = MutableLiveData<Resource<TvDetailResponse>>()

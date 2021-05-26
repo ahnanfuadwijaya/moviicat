@@ -61,10 +61,10 @@ class SearchMovieFragment : Fragment(), SearchMoviePagedAdapter.OnItemClickCallb
     fun searchMovie(query: String){
         UtilIdlingResource.increment()
         lifecycleScope.launch(Dispatchers.Main){
-            viewModel.getMovieSearchResultPaged(query).collectLatest {
+            viewModel.movieSearchResultPaged(query).collectLatest {
                 movieAdapter.submitData(lifecycle, it)
             }
-            if(viewModel.getMovieSearchResultPaged(query).count() == 0){
+            if(viewModel.movieSearchResultPaged(query).count() == 0){
                 UtilSnackBar.showIndeterminate(binding.root, getString(R.string.error_no_result))
             }
         }

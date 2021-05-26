@@ -1,11 +1,8 @@
 package id.riverflows.moviicat.data.source.remote.response
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import id.riverflows.moviicat.data.entity.GenreEntity
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class TvDetailResponse(
     @field:SerializedName("id")
         val id: Long,
@@ -27,4 +24,4 @@ data class TvDetailResponse(
         val status: String,
     @field:SerializedName("vote_average")
         val voteAverage: Float,
-): Parcelable
+)

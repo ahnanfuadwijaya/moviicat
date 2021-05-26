@@ -54,7 +54,7 @@ class DetailMovieViewModelTest{
     }
 
     @Test
-    fun getDetailMovie() {
+    fun detailMovie() {
         val movieDetail = UtilDataDummy.getDetailMovie(movieId) as MovieDetailResponse
         val dummySuccessResponse: Resource<MovieDetailResponse> = Resource.Success(movieDetail)
         val liveData = MutableLiveData<Resource<MovieDetailResponse>>()

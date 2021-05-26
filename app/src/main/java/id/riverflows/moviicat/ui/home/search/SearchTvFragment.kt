@@ -55,7 +55,7 @@ class SearchTvFragment : Fragment(), SearchTvPagedAdapter.OnItemClickCallback {
     fun searchTv(query: String){
         UtilIdlingResource.increment()
         lifecycleScope.launch(Dispatchers.Main){
-            viewModel.getTvSearchResultPaged(query).collectLatest {
+            viewModel.tvSearchResultPaged(query).collectLatest {
                 tvAdapter.submitData(lifecycle, it)
             }
         }

@@ -50,25 +50,6 @@ class HomeSharedViewModelTest{
     }
 
     @Test
-    fun getFavoritePaged(){
-        val dummyList = UtilDataDummy.getFavoriteList()
-        val mutableLiveData = MutableLiveData<PagingData<FavoriteEntity>>()
-        mutableLiveData.observeForever(favoriteObserver)
-        runBlocking {
-            delay(500)
-            mutableLiveData.value = PagingData.from(dummyList)
-            whenever(repository.getFavoritePaged()).thenReturn(mutableLiveData)
-            val pagingLiveData = repository.getFavoritePaged()
-            val list = pagingLiveData.value?.collectDataForTest()
-            verify(favoriteObserver).onChanged(mutableLiveData.value)
-            assertNotNull(list)
-            assertEquals(dummyList, list)
-            assertEquals(dummyList.size, list.size)
-        }
-        mutableLiveData.removeObserver(favoriteObserver)
-    }
-
-    @Test
     fun moviePaged(){
         val dummyList = UtilDataDummy.getMovieList()
         runBlocking {
@@ -99,7 +80,7 @@ class HomeSharedViewModelTest{
     }
 
     @Test
-    fun getMovieSearchResultPaged(){
+    fun movieSearchResultPaged(){
         val dummyList = UtilDataDummy.getMovieList()
         runBlocking {
             whenever(repository.getMovieSearchResultPaged(dummyQuery)).thenReturn(flowOf(PagingData.from(dummyList)))
@@ -114,7 +95,7 @@ class HomeSharedViewModelTest{
     }
 
     @Test
-    fun getTvSearchResultPaged(){
+    fun tvSearchResultPaged(){
         val dummyList = UtilDataDummy.getTvList()
         runBlocking {
             whenever(repository.getTvSearchResultPaged(dummyQuery)).thenReturn(flowOf(PagingData.from(dummyList)))
@@ -126,6 +107,25 @@ class HomeSharedViewModelTest{
                 assertEquals(dummyList.size, list.size)
             }
         }
+    }
+
+    @Test
+    fun favoritePaged(){
+        val dummyList = UtilDataDummy.getFavoriteList()
+        val mutableLiveData = MutableLiveData<PagingData<FavoriteEntity>>()
+        mutableLiveData.observeForever(favoriteObserver)
+        runBlocking {
+            delay(500)
+            mutableLiveData.value = PagingData.from(dummyList)
+            whenever(repository.getFavoritePaged()).thenReturn(mutableLiveData)
+            val pagingLiveData = repository.getFavoritePaged()
+            val list = pagingLiveData.value?.collectDataForTest()
+            verify(favoriteObserver).onChanged(mutableLiveData.value)
+            assertNotNull(list)
+            assertEquals(dummyList, list)
+            assertEquals(dummyList.size, list.size)
+        }
+        mutableLiveData.removeObserver(favoriteObserver)
     }
 
     @After

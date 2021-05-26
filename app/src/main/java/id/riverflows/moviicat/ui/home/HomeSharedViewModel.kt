@@ -12,7 +12,7 @@ class HomeSharedViewModel(private val repository: ListRepository): ViewModel() {
 
     val tvPaged = repository.getTvPaged().cachedIn(viewModelScope)
 
-    fun getMovieSearchResultPaged(query: String) = repository.getMovieSearchResultPaged(query).cachedIn(viewModelScope)
+    fun movieSearchResultPaged(query: String) = repository.getMovieSearchResultPaged(query).cachedIn(viewModelScope)
 
-    fun getTvSearchResultPaged(query: String) = repository.getTvSearchResultPaged(query).cachedIn(viewModelScope)
+    fun tvSearchResultPaged(query: String) = repository.getTvSearchResultPaged(query).cachedIn(viewModelScope)
 }
