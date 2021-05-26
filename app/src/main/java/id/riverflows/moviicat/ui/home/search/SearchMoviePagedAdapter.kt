@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import id.riverflows.moviicat.R
 import id.riverflows.moviicat.data.entity.MovieEntity
-import id.riverflows.moviicat.databinding.ItemHomeGridBinding
 import id.riverflows.moviicat.databinding.ItemSearchListBinding
 import id.riverflows.moviicat.di.Injection
 

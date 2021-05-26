@@ -3,9 +3,6 @@ package id.riverflows.moviicat.utils
 import androidx.paging.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 
 @ExperimentalCoroutinesApi
 @Suppress("UNCHECKED_CAST")

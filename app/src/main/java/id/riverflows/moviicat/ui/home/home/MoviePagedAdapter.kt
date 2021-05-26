@@ -1,4 +1,4 @@
-package id.riverflows.moviicat.ui.home.tv
+package id.riverflows.moviicat.ui.home.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import id.riverflows.moviicat.R
-import id.riverflows.moviicat.data.entity.TvEntity
+import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.databinding.ItemHomeGridBinding
 import id.riverflows.moviicat.di.Injection
 
-class TvPagedAdapter: PagingDataAdapter<TvEntity, TvPagedAdapter.TvViewHolder>(
-    TvComparator
+class MoviePagedAdapter: PagingDataAdapter<MovieEntity, MoviePagedAdapter.MovieViewHolder>(
+    MovieComparator
 ) {
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -22,35 +22,37 @@ class TvPagedAdapter: PagingDataAdapter<TvEntity, TvPagedAdapter.TvViewHolder>(
         this.onItemClickCallback = onItemClickCallback
     }
 
-    override fun onBindViewHolder(holder: TvViewHolder, position: Int) {
+
+
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val item = getItem(position)
         item?.let { holder.bindView(it) }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TvViewHolder {
-        return TvViewHolder(
-            ItemHomeGridBinding.bind(
-                LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_home_grid,
-                    parent,
-                    false
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+        return MovieViewHolder(
+                ItemHomeGridBinding.bind(
+                        LayoutInflater.from(parent.context).inflate(
+                                R.layout.item_home_grid,
+                                parent,
+                                false
+                        )
                 )
-            )
         )
     }
-    inner class TvViewHolder(private val binding: ItemHomeGridBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bindView(data: TvEntity){
+    inner class MovieViewHolder(private val binding: ItemHomeGridBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bindView(data: MovieEntity){
             val context = itemView.context
             val posterPath = "${Injection.providePosterPath()}${data.posterPath}"
             with(binding){
                 Glide.with(context)
-                    .asBitmap()
-                    .load(posterPath)
-                    .apply(RequestOptions().override(100,150).placeholder(R.drawable.ic_loading))
-                    .error(R.drawable.ic_broken_image)
-                    .into(ivPoster)
-                tvTitle.text = data.name
-                tvDate.text = data.firstAirDate
+                        .asBitmap()
+                        .load(posterPath)
+                        .apply(RequestOptions().override(100,150).placeholder(R.drawable.ic_loading))
+                        .error(R.drawable.ic_broken_image)
+                        .into(ivPoster)
+                tvTitle.text = data.title
+                tvDate.text = data.releaseDate
                 tvScore.text = data.voteAverage.toString()
                 if(data.voteAverage < 7.5){
                     binding.ivScore.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_score_red))
@@ -61,15 +63,17 @@ class TvPagedAdapter: PagingDataAdapter<TvEntity, TvPagedAdapter.TvViewHolder>(
             itemView.setOnClickListener { onItemClickCallback.onItemClicked(data) }
         }
     }
+
     interface OnItemClickCallback{
-        fun onItemClicked(data: TvEntity)
+        fun onItemClicked(data: MovieEntity)
     }
-    companion object TvComparator : DiffUtil.ItemCallback<TvEntity>() {
-        override fun areItemsTheSame(oldItem: TvEntity, newItem: TvEntity): Boolean {
+
+    companion object MovieComparator : DiffUtil.ItemCallback<MovieEntity>() {
+        override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: TvEntity, newItem: TvEntity): Boolean {
+        override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
             return oldItem == newItem
         }
     }

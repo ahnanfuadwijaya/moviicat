@@ -16,6 +16,7 @@ import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.detail.movie.DetailMovieActivity
 import id.riverflows.moviicat.ui.home.HomeSharedViewModel
 import id.riverflows.moviicat.util.UtilConstants
+import id.riverflows.moviicat.util.UtilIdlingResource
 import id.riverflows.moviicat.util.UtilSnackBar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -58,15 +59,17 @@ class SearchMovieFragment : Fragment(), SearchMoviePagedAdapter.OnItemClickCallb
     }
 
     fun searchMovie(query: String){
+        UtilIdlingResource.increment()
         lifecycleScope.launch(Dispatchers.Main){
             viewModel.getMovieSearchResultPaged(query).collectLatest {
-                movieAdapter.submitData(it)
+                movieAdapter.submitData(lifecycle, it)
             }
             if(viewModel.getMovieSearchResultPaged(query).count() == 0){
                 UtilSnackBar.showIndeterminate(binding.root, getString(R.string.error_no_result))
             }
         }
         Timber.d(query)
+        UtilIdlingResource.decrement()
     }
 
     override fun onDestroy() {

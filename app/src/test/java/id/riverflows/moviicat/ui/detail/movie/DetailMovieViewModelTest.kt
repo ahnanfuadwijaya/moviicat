@@ -8,11 +8,10 @@ import com.nhaarman.mockitokotlin2.verify
 import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.response.MovieDetailResponse
-import id.riverflows.moviicat.data.source.repository.DetailRepository
 import id.riverflows.moviicat.data.source.repository.FakeDetailRepository
 import id.riverflows.moviicat.util.UtilConstants
-import id.riverflows.moviicat.utils.UtilDataDummy
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
+import id.riverflows.moviicat.utils.UtilDataDummy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -111,7 +110,7 @@ class DetailMovieViewModelTest{
 
     @Test
     fun findFavoriteByIdAndType(){
-        val dummyFavorite = UtilDataDummy.getFavoriteList()[0]
+        val dummyFavorite = UtilDataDummy.getFavoriteByIdAndType(movieId, dummyType) as FavoriteEntity
         val observer: Observer<FavoriteEntity> = mock()
         val removeResultLiveData = MutableLiveData<FavoriteEntity>()
         removeResultLiveData.observeForever(observer)

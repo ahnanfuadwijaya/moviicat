@@ -1,7 +1,5 @@
 package id.riverflows.moviicat.data.source.remote.api
 
-import androidx.paging.DataSource
-import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.data.source.remote.response.MovieListResponse
 import id.riverflows.moviicat.data.source.remote.response.TvListResponse
 import retrofit2.http.GET

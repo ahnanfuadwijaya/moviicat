@@ -17,13 +17,11 @@ import id.riverflows.moviicat.ui.decoration.SpaceItemDecoration
 import id.riverflows.moviicat.ui.detail.movie.DetailMovieActivity
 import id.riverflows.moviicat.ui.detail.tv.DetailTvActivity
 import id.riverflows.moviicat.ui.home.HomeSharedViewModel
-import id.riverflows.moviicat.ui.home.movie.MoviePagedAdapter
-import id.riverflows.moviicat.ui.home.tv.TvPagedAdapter
 import id.riverflows.moviicat.util.UtilConstants
+import id.riverflows.moviicat.util.UtilIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class GridFragment(private val type: String) : Fragment(){
     private var _binding: FragmentGridOrListBinding? = null
@@ -32,7 +30,6 @@ class GridFragment(private val type: String) : Fragment(){
     private lateinit var viewModel: HomeSharedViewModel
     private val movieAdapter = MoviePagedAdapter()
     private val tvAdapter = TvPagedAdapter()
-    private val loadingStateAdapter = HomeLoadStateAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +45,6 @@ class GridFragment(private val type: String) : Fragment(){
         setupCallback()
         obtainViewModel()
         observeViewModel()
-        Timber.d(type)
     }
 
     private fun obtainViewModel(){
@@ -91,17 +87,19 @@ class GridFragment(private val type: String) : Fragment(){
     }
 
     private fun observeViewModel(){
+        UtilIdlingResource.increment()
         lifecycleScope.launch(Dispatchers.Main){
             if(type == TYPE_MOVIE){
                 viewModel.moviePaged.collectLatest { pagingData ->
-                    movieAdapter.submitData(pagingData)
+                    movieAdapter.submitData(lifecycle, pagingData)
                 }
             }else{
                 viewModel.tvPaged.collectLatest { pagingData ->
-                    tvAdapter.submitData(pagingData)
+                    tvAdapter.submitData(lifecycle, pagingData)
                 }
             }
         }
+        UtilIdlingResource.decrement()
     }
 
     override fun onDestroy() {

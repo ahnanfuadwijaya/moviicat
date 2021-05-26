@@ -8,7 +8,6 @@ import com.nhaarman.mockitokotlin2.verify
 import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.data.source.remote.Resource
 import id.riverflows.moviicat.data.source.remote.response.TvDetailResponse
-import id.riverflows.moviicat.data.source.repository.DetailRepository
 import id.riverflows.moviicat.data.source.repository.FakeDetailRepository
 import id.riverflows.moviicat.util.UtilConstants
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
@@ -27,7 +26,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
-import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -110,7 +108,7 @@ class DetailTvViewModelTest{
 
     @Test
     fun findFavoriteByIdAndType(){
-        val dummyFavorite = UtilDataDummy.getFavoriteList()[0]
+        val dummyFavorite = UtilDataDummy.getFavoriteByIdAndType(tvId, dummyType) as FavoriteEntity
         val observer: Observer<FavoriteEntity> = mock()
         val removeResultLiveData = MutableLiveData<FavoriteEntity>()
         removeResultLiveData.observeForever(observer)

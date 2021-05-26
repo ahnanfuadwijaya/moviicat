@@ -8,8 +8,6 @@ import androidx.navigation.ui.setupWithNavController
 import id.riverflows.moviicat.R
 import id.riverflows.moviicat.databinding.ActivityHomeBinding
 import id.riverflows.moviicat.factory.ViewModelFactory
-import id.riverflows.moviicat.ui.home.favorite.FavoriteFragment
-import id.riverflows.moviicat.ui.home.home.HomeFragment
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding

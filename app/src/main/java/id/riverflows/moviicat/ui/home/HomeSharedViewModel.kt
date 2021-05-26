@@ -3,7 +3,6 @@ package id.riverflows.moviicat.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import androidx.paging.liveData
 import id.riverflows.moviicat.data.source.repository.ListRepository
 
 class HomeSharedViewModel(private val repository: ListRepository): ViewModel() {

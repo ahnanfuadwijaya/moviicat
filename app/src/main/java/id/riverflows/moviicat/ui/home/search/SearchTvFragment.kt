@@ -15,6 +15,7 @@ import id.riverflows.moviicat.factory.ViewModelFactory
 import id.riverflows.moviicat.ui.detail.tv.DetailTvActivity
 import id.riverflows.moviicat.ui.home.HomeSharedViewModel
 import id.riverflows.moviicat.util.UtilConstants
+import id.riverflows.moviicat.util.UtilIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -52,11 +53,13 @@ class SearchTvFragment : Fragment(), SearchTvPagedAdapter.OnItemClickCallback {
     }
 
     fun searchTv(query: String){
+        UtilIdlingResource.increment()
         lifecycleScope.launch(Dispatchers.Main){
             viewModel.getTvSearchResultPaged(query).collectLatest {
-                tvAdapter.submitData(it)
+                tvAdapter.submitData(lifecycle, it)
             }
         }
+        UtilIdlingResource.decrement()
     }
 
     override fun onItemClicked(data: TvEntity) {

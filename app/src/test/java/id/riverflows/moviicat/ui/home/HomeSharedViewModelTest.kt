@@ -8,7 +8,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.data.source.repository.FakeListRepository
-import id.riverflows.moviicat.data.source.repository.ListRepository
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
 import id.riverflows.moviicat.utils.UtilDataDummy
 import id.riverflows.moviicat.utils.UtilPagingData.collectDataForTest

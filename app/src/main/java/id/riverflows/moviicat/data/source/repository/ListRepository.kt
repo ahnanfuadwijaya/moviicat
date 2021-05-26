@@ -28,7 +28,7 @@ class ListRepository(
                 UtilConstants.PREFETCH_DISTANCE,
                 true,
                 UtilConstants.INITIAL_LOAD_SIZE
-            ), UtilConstants.INITIAL_KEY){
+            ), UtilConstants.INITIAL_KEY) {
             PagingDataSource.MoviePaged(api)
         }.flow
     }

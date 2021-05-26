@@ -9,10 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import id.riverflows.moviicat.R
-import id.riverflows.moviicat.data.entity.MovieEntity
 import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.databinding.ItemFavoriteListBinding
-import id.riverflows.moviicat.databinding.ItemHomeGridBinding
 import id.riverflows.moviicat.di.Injection
 import id.riverflows.moviicat.util.UtilConstants
 

@@ -13,41 +13,28 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class HomeActivityTest{
+class FavoriteFragmentTest{
     private lateinit var activityScenario: ActivityScenario<HomeActivity>
 
     @Before
     fun setup(){
         activityScenario = ActivityScenario.launch(HomeActivity::class.java)
-        IdlingRegistry.getInstance().register(UtilIdlingResource.getEspressoIdlingResourceForMainActivity())
+        IdlingRegistry.getInstance().register(UtilIdlingResource.idlingResource)
     }
 
     @Test
-    fun loadHome(){
-        onView(withId(android.R.id.content)).check(matches(isDisplayed()))
-        onView(withId(R.id.tabs)).check(matches(isDisplayed()))
+    fun loadFavorite(){
+        onView(withId(R.id.menu_favorite)).perform(click())
+        onView(withId(R.id.rv_grid_or_list)).check(matches(isDisplayed()))
         onView(withId(android.R.id.content)).perform(swipeUp())
         onView(withId(android.R.id.content)).perform(swipeLeft())
         onView(withId(android.R.id.content)).perform(swipeDown())
         onView(withId(android.R.id.content)).perform(swipeRight())
     }
 
-    @Test
-    fun loadMovie() {
-        onView(withId(android.R.id.content)).perform(swipeUp())
-        onView(withId(R.id.rv_movies)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun loadTvShow(){
-        onView(withId(android.R.id.content)).perform(swipeLeft())
-        onView(withId(android.R.id.content)).perform(swipeUp())
-        onView(withId(R.id.rv_tv_shows)).check(matches(isDisplayed()))
-    }
-
     @After
     fun tearDown() {
         activityScenario.close()
-        IdlingRegistry.getInstance().unregister(UtilIdlingResource.getEspressoIdlingResourceForMainActivity())
+        IdlingRegistry.getInstance().unregister(UtilIdlingResource.idlingResource)
     }
 }

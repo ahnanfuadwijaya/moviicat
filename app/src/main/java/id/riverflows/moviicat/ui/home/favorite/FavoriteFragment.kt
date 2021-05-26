@@ -16,6 +16,7 @@ import id.riverflows.moviicat.ui.detail.movie.DetailMovieActivity
 import id.riverflows.moviicat.ui.detail.tv.DetailTvActivity
 import id.riverflows.moviicat.ui.home.HomeSharedViewModel
 import id.riverflows.moviicat.util.UtilConstants
+import id.riverflows.moviicat.util.UtilIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -56,12 +57,14 @@ class FavoriteFragment : Fragment(), FavoritePagedListAdapter.OnItemClickCallbac
     }
 
     private fun observeViewModel(){
+        UtilIdlingResource.increment()
         viewModel.favoritePaged.observe(viewLifecycleOwner){
             lifecycleScope.launch(Dispatchers.IO){
-                rvAdapter.submitData(it)
+                rvAdapter.submitData(lifecycle, it)
             }
             Timber.d(it.toString())
         }
+        UtilIdlingResource.decrement()
     }
 
     override fun onDestroy() {

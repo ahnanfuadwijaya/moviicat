@@ -1,6 +1,5 @@
 package id.riverflows.moviicat.data.source.local.room
 
-import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteQuery

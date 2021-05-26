@@ -1,7 +1,5 @@
 package id.riverflows.moviicat.ui.home.search
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -74,6 +72,7 @@ class SearchFragment : Fragment() {
 
     private fun searchMovieOrTv(query: String){
         if(query.isBlank()) return
+
         when(binding.viewPager.currentItem){
             0 -> pagerAdapter.searchMovie(query)
             else -> pagerAdapter.searchTv(query)

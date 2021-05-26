@@ -55,6 +55,7 @@ class DetailTvActivity : AppCompatActivity() {
         viewModel.getTv(tvId)
         setLoadingState(true)
         getFavoriteState(tvId)
+        UtilIdlingResource.increment()
     }
 
     private fun getFavoriteState(id: Long){
@@ -64,6 +65,7 @@ class DetailTvActivity : AppCompatActivity() {
     private fun observeViewModel(){
         viewModel.tv.observe(this){
             setLoadingState(false)
+            UtilIdlingResource.decrement()
             when(it){
                 is Resource.Success -> {
                     bindData(it.value)

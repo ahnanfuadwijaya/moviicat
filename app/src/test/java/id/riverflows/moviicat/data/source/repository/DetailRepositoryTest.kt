@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.verify
 import id.riverflows.moviicat.data.source.local.room.FavoriteDao
+import id.riverflows.moviicat.data.source.local.room.FavoriteEntity
 import id.riverflows.moviicat.data.source.remote.api.DetailApiService
 import id.riverflows.moviicat.util.UtilConstants
 import id.riverflows.moviicat.utils.MainCoroutineScopeRule
@@ -61,7 +62,7 @@ class DetailRepositoryTest{
     @Test
     fun insertFavorite(){
         runBlocking {
-            val dummyFavorite = UtilDataDummy.getFavoriteList()[0]
+            val dummyFavorite = UtilDataDummy.getFavoriteByIdAndType(movieId, dummyType) as FavoriteEntity
             Mockito.`when`(favoriteDao.insert(dummyFavorite)).thenReturn(dummyInsertResult)
             val response = favoriteDao.insert(dummyFavorite)
             assertNotNull(response)
@@ -72,7 +73,7 @@ class DetailRepositoryTest{
     @Test
     fun removeFavorite(){
         runBlocking {
-            val dummyFavorite = UtilDataDummy.getFavoriteList()[0]
+            val dummyFavorite = UtilDataDummy.getFavoriteByIdAndType(movieId, dummyType) as FavoriteEntity
             Mockito.`when`(favoriteDao.remove(dummyFavorite)).thenReturn(dummyRemoveResult)
             val response = favoriteDao.remove(dummyFavorite)
             assertNotNull(response)
@@ -83,7 +84,7 @@ class DetailRepositoryTest{
     @Test
     fun findFavoriteByIdAndType(){
         runBlocking {
-            val dummyFavorite = UtilDataDummy.getFavoriteList()[0]
+            val dummyFavorite = UtilDataDummy.getFavoriteByIdAndType(movieId, dummyType)
             Mockito.`when`(favoriteDao.findByIdAndType(movieId, dummyType)).thenReturn(dummyFavorite)
             val response = favoriteDao.findByIdAndType(movieId, dummyType)
             assertNotNull(response)

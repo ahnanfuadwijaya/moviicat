@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -56,6 +55,7 @@ class DetailMovieActivity : AppCompatActivity() {
         viewModel.getMovie(movieId)
         setLoadingState(true)
         getFavoriteState(movieId)
+        UtilIdlingResource.increment()
     }
 
     private fun getFavoriteState(id: Long){
@@ -65,6 +65,7 @@ class DetailMovieActivity : AppCompatActivity() {
     private fun observeViewModel(){
         viewModel.movie.observe(this){
             setLoadingState(false)
+            UtilIdlingResource.decrement()
             when(it){
                 is Resource.Success -> {
                     bindData(it.value)
